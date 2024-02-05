@@ -27,12 +27,11 @@ app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 
 app.use((err, req, res, next) => {
-  const errorStatus = err.status || 500;
-  const errorMessage = err.message || "Something went wrong!";
-  return res.status(errorStatus).json({
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  return res.status(statusCode).json({
     success: false,
-    status: errorStatus,
-    message: errorMessage,
-    stack: err.stack,
+    message,
+    statusCode,
   });
 });
