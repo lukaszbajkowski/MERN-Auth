@@ -17,7 +17,7 @@ export default function Header() {
           <Link to="about" className="my-auto">
             <li>About</li>
           </Link>
-          <Link to="/sign-in" className="my-auto">
+          <Link to={currentUser ? "/profile" : "/sign-up"} className="my-auto">
             {currentUser ? (
               <img
                 src={currentUser.profilePicture}
