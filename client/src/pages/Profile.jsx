@@ -12,6 +12,7 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  signOut,
 } from "../redux/user/userSlice";
 
 export default function Profile() {
@@ -65,6 +66,7 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
+
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
         headers: {
@@ -72,15 +74,27 @@ export default function Profile() {
         },
         body: JSON.stringify(formData),
       });
+      
       const data = await res.json();
+
       if (data.success === false) {
         dispatch(updateUserFailure(data));
         return;
       }
+
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
     } catch (error) {
       dispatch(updateUserFailure(error));
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await fetch("/api/auth/signout");
+      dispatch(signOut());
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -143,7 +157,9 @@ export default function Profile() {
       </form>
       <div className="flex justify-between mt-5">
         <span className="text-red-700 cursor-pointer">Delete Account</span>
-        <span className="text-red-700 cursor-pointer">Loggout</span>
+        <span onClick={handleSignOut} className="text-red-700 cursor-pointer">
+          Loggout
+        </span>
       </div>
       <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>
       <p className="text-green-700 mt-5">
