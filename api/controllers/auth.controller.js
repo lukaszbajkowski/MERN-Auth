@@ -47,7 +47,10 @@ export const google = async (req, res, next) => {
       const { password: userPassword, ...userData } = user._doc;
       const expiryDate = new Date(Date.now() + 3600000);
       res
-        .cookie("token", token, { httpOnly: true, expiryDate: expiryDate })
+        .cookie("access_token", token, {
+          httpOnly: true,
+          expiryDate: expiryDate,
+        })
         .status(200)
         .json(userData);
     } else {
