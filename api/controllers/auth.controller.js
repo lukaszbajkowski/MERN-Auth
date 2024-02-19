@@ -2,18 +2,6 @@ import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
-import nodemailer from "nodemailer";
-import dotenv from "dotenv";
-
-dotenv.config();
-
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS,
-  },
-});
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -22,73 +10,9 @@ export const signup = async (req, res, next) => {
 
   try {
     await newUser.save();
-
-    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
-    const confirmationLink = `${process.env.APP_URL}/auth/confirm-email/${token}`;
-    const mailOptions = {
-      from: process.env.GMAIL_USER,
-      to: email,
-      subject: "Confirmation of registration",
-      html: `Click <a href="${confirmationLink}">here</a> ,to confirm your registration.`,
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-        return res.status(500).json({
-          success: false,
-          message: "Error while sending confirmation email.",
-        });
-      }
-      console.log("Email sent: " + info.response);
-    });
-
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
     next(error);
-  }
-};
-
-export const confirmEmail = async (req, res, next) => {
-  const { token } = req.params;
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.userId);
-
-    if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found." });
-    }
-
-    if (user.emailConfirmed) {
-      return res.status(400).json({
-        success: false,
-        message: "Email address has already been confirmed.",
-      });
-    }
-
-    user.emailConfirmed = true;
-    await user.save();
-
-    res.status(200).json({
-      success: true,
-      message: "Email address confirmed successfully.",
-    });
-  } catch (error) {
-    if (error.name === "TokenExpiredError") {
-      return res
-        .status(401)
-        .json({ success: false, message: "The token has expired." });
-    }
-
-    return res.status(500).json({
-      success: false,
-      message: "Error while confirming email address.",
-    });
   }
 };
 
