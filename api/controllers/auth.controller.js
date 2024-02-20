@@ -21,10 +21,27 @@ export const signup = async (req, res, next) => {
   const newUser = new User({ username, email, password: hashedPassword });
 
   try {
+    const user = await User.findOne({ username });
+    const emailadress = await User.findOne({ email });
+
+    if (user) {
+      return res.status(404).json({
+        success: false,
+        message: "User already exist.",
+      });
+    }
+
+    if (emailadress) {
+      return res.status(404).json({
+        success: false,
+        message: "Email already exist.",
+      });
+    }
+
     await newUser.save();
 
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
+      expiresIn: "30m",
     });
     const confirmationLink = `${process.env.APP_URL}/confirm-email/${token}`;
     const mailOptions = {
@@ -34,15 +51,13 @@ export const signup = async (req, res, next) => {
       html: `Click <a href="${confirmationLink}">here</a> ,to confirm your registration.`,
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
+    transporter.sendMail(mailOptions, (error) => {
       if (error) {
-        console.log(error);
         return res.status(500).json({
           success: false,
           message: "Error while sending confirmation email.",
         });
       }
-      console.log("Email sent: " + info.response);
     });
 
     res.status(201).json({ message: "User created successfully" });
@@ -59,16 +74,11 @@ export const confirmEmail = async (req, res, next) => {
     const user = await User.findById(decoded.userId);
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found." });
+      return next(errorHandler(404, "User not found."))
     }
 
     if (user.emailConfirmed) {
-      return res.status(400).json({
-        success: false,
-        message: "Email address has already been confirmed.",
-      });
+      return next(errorHandler(400, "Email address has already been confirmed."))
     }
 
     user.emailConfirmed = true;
@@ -80,15 +90,9 @@ export const confirmEmail = async (req, res, next) => {
     });
   } catch (error) {
     if (error.name === "TokenExpiredError") {
-      return res
-        .status(401)
-        .json({ success: false, message: "The token has expired." });
+      return next(errorHandler(401, "The token has expired."));
     }
-
-    return res.status(500).json({
-      success: false,
-      message: "Error while confirming email address.",
-    });
+    return next(errorHandler(500, "Error while confirming email address."));
   }
 };
 
@@ -150,6 +154,7 @@ export const google = async (req, res, next) => {
         email: req.body.email,
         password: hashedPassword,
         profilePicture: req.body.photo,
+        emailConfirmed: true
       });
 
       await newUser.save();
@@ -169,6 +174,6 @@ export const google = async (req, res, next) => {
   }
 };
 
-export const signout = async (req, res, next) => {
+export const signout = async (req, res) => {
   res.clearCookie("access_token").status(200).json({ message: "Logged out" });
 };
