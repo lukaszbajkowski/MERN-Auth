@@ -6,7 +6,7 @@ const Confirmation = () => {
   const { token } = useParams();
 
   useEffect(() => {
-    fetch(`/api/auth/confirm-email/${token}`)
+    fetch(`/api/auth/confirm-email/?token=${token}`)
       .then((response) => response.json())
       .then((data) => setMessage(data.message))
       .catch((error) =>
