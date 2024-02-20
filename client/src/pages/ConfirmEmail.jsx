@@ -6,19 +6,27 @@ const Confirmation = () => {
   const { token } = useParams();
 
   useEffect(() => {
-     fetch(`/api/auth/confirm-email/${token}`, {
-        method: "GET",
-        headers: {
+    const confirmEmail = async () => {
+      try {
+        const response = await fetch(`/api/auth/confirm-email/${token}`, {
+          method: "GET",
+          headers: {
             "Content-Type": "application/json",
-        }
-     })
-      .then((response) => response.json())
-      .then((data) => setMessage(data.message))
-      .catch((error) =>
-        setMessage("Error confirming email. Please try again.")
-      );
+          },
+        });
 
-    
+        if (!response.ok) {
+          throw new Error("Error confirming email. Please try again.");
+        }
+
+        const data = await response.json();
+        setMessage(data.message);
+      } catch (error) {
+        setMessage("Error confirming email. Please try again.");
+      }
+    };
+
+    confirmEmail();
   }, [token]);
 
   return (
