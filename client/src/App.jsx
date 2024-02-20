@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import LoggedRoute from "./components/LoggedRoute";
+import Confirmation from "./pages/ConfirmEmail";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
         </Route>
+        <Route path="/confirm-email/:token" element={<Confirmation />} />
       </Routes>
     </BrowserRouter>
   );

@@ -26,7 +26,7 @@ export const signup = async (req, res, next) => {
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
-    const confirmationLink = `${process.env.APP_URL}/auth/confirm-email/${token}`;
+    const confirmationLink = `${process.env.APP_URL}/confirm-email/${token}`;
     const mailOptions = {
       from: process.env.GMAIL_USER,
       to: email,
