@@ -135,6 +135,7 @@ export const google = async (req, res, next) => {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
       const { password: userPassword, ...userData } = user._doc;
       const expiryDate = new Date(Date.now() + 3600000);
+
       res
         .cookie("access_token", token, {
           httpOnly: true,
@@ -158,9 +159,11 @@ export const google = async (req, res, next) => {
       });
 
       await newUser.save();
+
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
       const { password: userPassword, ...userData } = newUser._doc;
       const expiryDate = new Date(Date.now() + 3600000);
+
       res
         .cookie("access_token", token, {
           httpOnly: true,
