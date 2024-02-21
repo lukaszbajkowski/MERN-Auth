@@ -4,6 +4,7 @@ import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
+import crypto from "crypto";
 
 dotenv.config();
 
@@ -53,10 +54,9 @@ export const signup = async (req, res, next) => {
 
     transporter.sendMail(mailOptions, (error) => {
       if (error) {
-        return res.status(500).json({
-          success: false,
-          message: "Error while sending confirmation email.",
-        });
+        return next(
+          errorHandler(500, "Error while sending password reset email.")
+        );
       }
     });
 
@@ -74,11 +74,13 @@ export const confirmEmail = async (req, res, next) => {
     const user = await User.findById(decoded.userId);
 
     if (!user) {
-      return next(errorHandler(404, "User not found."))
+      return next(errorHandler(404, "User not found."));
     }
 
     if (user.emailConfirmed) {
-      return next(errorHandler(400, "Email address has already been confirmed."))
+      return next(
+        errorHandler(400, "Email address has already been confirmed.")
+      );
     }
 
     user.emailConfirmed = true;
@@ -155,7 +157,7 @@ export const google = async (req, res, next) => {
         email: req.body.email,
         password: hashedPassword,
         profilePicture: req.body.photo,
-        emailConfirmed: true
+        emailConfirmed: true,
       });
 
       await newUser.save();
@@ -179,4 +181,76 @@ export const google = async (req, res, next) => {
 
 export const signout = async (req, res) => {
   res.clearCookie("access_token").status(200).json({ message: "Logged out" });
+};
+
+export const requestPasswordReset = async (req, res, next) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 3600000;
+    await user.save();
+
+    const resetLink = `${process.env.APP_URL}/reset-password/${resetToken}`;
+    const mailOptions = {
+      from: process.env.GMAIL_USER,
+      to: email,
+      subject: "Password Reset Request",
+      html: `Click <a href="${resetLink}">here</a> to reset your password.`,
+    };
+
+    transporter.sendMail(mailOptions, (error) => {
+      if (error) {
+        return next(
+          errorHandler(500, "Error while sending password reset email.")
+        );
+      }
+    });
+
+    res
+      .status(200)
+      .json({ message: "Password reset instructions sent to your email." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resetPassword = async (req, res, next) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
+
+  try {
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+    const isPasswordCorrect = bcryptjs.compareSync(newPassword, user.password);
+
+    if (!user) {
+      return next(errorHandler(400, "Invalid or expired reset token."));
+    }
+    
+    if (isPasswordCorrect) {
+      return next(errorHandler(400, "New password cannot be the same."));
+    }
+  
+    const hashedPassword = bcryptjs.hashSync(newPassword, 10);
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res
+      .status(200)
+      .json({ success: true, message: "Password reset successfully." });
+  } catch (error) {
+    next(error);
+  }
 };

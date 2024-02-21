@@ -20,6 +20,7 @@ export default function SignIn() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       dispatch(loginStart());
       const res = await fetch("/api/auth/signin", {
@@ -29,11 +30,14 @@ export default function SignIn() {
         },
         body: JSON.stringify(formData),
       });
+
       const data = await res.json();
+
       if (data.success === false) {
         dispatch(loginFailure(data));
         return;
       }
+      
       dispatch(loginSuccess(data));
       navigate("/");
     } catch (error) {

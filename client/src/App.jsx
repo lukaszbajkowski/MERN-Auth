@@ -9,6 +9,8 @@ import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import LoggedRoute from "./components/LoggedRoute";
 import Confirmation from "./pages/ConfirmEmail";
+import ResetPasswordRequest from "./pages/ResetPasswordRequest";
+import ResetPassword from "./pages/ResetPassword";
 
 export default function App() {
   return (
@@ -23,8 +25,17 @@ export default function App() {
         <Route element={<LoggedRoute />}>
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/confirm-email/:token" element={<Confirmation />} />
+          <Route
+            path="/reset-password"
+            element={<ResetPasswordRequest />}
+          />
+          <Route
+            path="/reset-password/:token"
+            element={<ResetPassword />}
+          />
+          <Route path="/reset-password-send" element={""} />
         </Route>
-        <Route path="/confirm-email/:token" element={<Confirmation />} />
       </Routes>
     </BrowserRouter>
   );
