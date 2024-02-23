@@ -36,7 +36,9 @@ const ResetPasswordRequest = () => {
 
     return (
         <div className="p-3 max-w-lg mx-auto">
-            <h1 className="text-3xl text-center font-semibold my-7">Reset Password</h1>
+            <h1 className="text-3xl text-center font-semibold my-7">
+                Reset Password
+            </h1>
             <form onSubmit={handleResetRequest} className="flex flex-col gap-4">
                 <input
                     type="email"
@@ -52,7 +54,9 @@ const ResetPasswordRequest = () => {
                 >
                     Reset Password
                 </button>
-                <p className="text-green-700 mt-5">{message}</p>
+                <p className="text-green-700 mt-5">
+                    {message}
+                </p>
             </form>
         </div>
     );
