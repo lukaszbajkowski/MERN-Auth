@@ -4,7 +4,6 @@ import {
     google,
     requestPasswordReset,
     resetPassword,
-    resetPasswordVerifyToken,
     signin,
     signout,
     signup
@@ -19,6 +18,5 @@ router.post("/signout", signout);
 router.get("/confirm-email/:token", confirmEmail);
 router.post("/reset-password", requestPasswordReset);
 router.post("/reset-password/:token", resetPassword);
-router.get("/reset-password/:token", resetPasswordVerifyToken);
 
 export default router;

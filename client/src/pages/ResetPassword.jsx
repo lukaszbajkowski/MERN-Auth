@@ -8,34 +8,28 @@ const ResetPassword = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkToken = async () => {
+    const checkTokenValidity = async () => {
       try {
-        const response = await fetch(`/api/auth/reset-password/${token}`);
+        const response = await fetch(`/api/auth/reset-password/${token}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token }),
+        });
 
-        if (!response.ok) {
-          if (response.status === 400) {
-            navigate("/", { replace: true });
-          } else {
-            throw new Error(`Error: ${response.status}`);
-          }
-        }
+        const data = await response.json();
 
-        const contentType = response.headers.get("content-type");
-        const responseData = await response.text(); // Get the response as text
-
-        if (contentType && contentType.includes("application/json")) {
-          const data = JSON.parse(responseData); // Try to parse as JSON
-          // Handle your JSON data here
-        } else {
-          console.log("Non-JSON Response:", responseData); // Log the non-JSON response
-          throw new Error("Response is not in JSON format");
+        if (data.message === "Invalid or expired reset token.") {
+          navigate("/reset-password-invalid-token", { replace: true });
         }
       } catch (error) {
-        setMessage(error.message);
+        console.error("Error checking token validity:", error);
       }
     };
 
-    checkToken();
+    // Check token validity when component mounts
+    checkTokenValidity();
   }, [token, navigate]);
 
   const handleResetPassword = async (e) => {
@@ -47,7 +41,7 @@ const ResetPassword = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ newPassword }),
+        body: JSON.stringify({ newPassword, token }),
       });
 
       const data = await response.json();
