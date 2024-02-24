@@ -266,7 +266,7 @@ export const resetPasswordVerifyToken = async (req, res, next) => {
     });
 
     if (!user) {
-      return next(errorHandler(400, "Invalid or expired reset token."));
+      return res.status(400).json({ success: false, message: "Invalid or expired reset token." });
     }
 
     res.status(200).json({ success: true, message: "Token is valid." });
