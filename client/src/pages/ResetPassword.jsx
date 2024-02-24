@@ -5,45 +5,62 @@ const ResetPassword = () => {
     const [newPassword, setNewPassword] = useState("");
     const [message, setMessage] = useState("");
     const {token} = useParams();
-
     const navigate = useNavigate();
 
     useEffect(() => {
-        const checkTokenValidity = async () => {
+        const checkToken = async () => {
             try {
-                const response = await fetch(`/api/auth/reset-password/${token}`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({newPassword}),
-                });
-
+                const response = await fetch(`/api/auth/reset-password/${token}`);
                 const data = await response.json();
-
-                if (response.ok) {
-                    setMessage(data.message);
-                    setTimeout(() => {
-                        navigate("/sign-in");
-                    }, 3000);
-                } else {
-                    throw new Error(data.message);
+                if (!response.ok) {
+                    if (response.status === 400) {
+                        navigate("/", {replace: true});
+                    } else {
+                        throw new Error(data.message);
+                    }
                 }
             } catch (error) {
-                if (error.message === "Invalid or expired reset token.") {
-                    navigate("/reset-password-error");
-                }
                 setMessage(error.message);
             }
         };
 
-        checkTokenValidity();
-    }, [navigate, newPassword, token]);
+        checkToken();
+    }, [token, navigate]);
+
+    const handleResetPassword = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch(`/api/auth/reset-password/${token}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({newPassword}),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setMessage(data.message);
+                setTimeout(() => {
+                    navigate("/sign-in", {replace: true});
+                }, 3000);
+            } else {
+                throw new Error(data.message);
+            }
+        } catch (error) {
+            setMessage(error.message);
+        }
+    };
+
 
     return (
         <div className="p-3 max-w-lg mx-auto">
-            <h1 className="text-3xl text-center font-semibold my-7">Set up new password</h1>
-            <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-4">
+            <h1 className="text-3xl text-center font-semibold my-7">
+                Set up new password
+            </h1>
+            <form onSubmit={handleResetPassword} className="flex flex-col gap-4">
                 <input
                     placeholder="New Password"
                     type="password"
@@ -58,7 +75,9 @@ const ResetPassword = () => {
                 >
                     Reset Password
                 </button>
-                <p className="text-green-700 mt-5">{message}</p>
+                <p className="text-green-700 mt-2">
+                    {message}
+                </p>
             </form>
         </div>
     );
