@@ -11,22 +11,30 @@ const ResetPassword = () => {
         const checkToken = async () => {
             try {
                 const response = await fetch(`/api/auth/reset-password/${token}`);
-                const data = await response.json();
+    
                 if (!response.ok) {
                     if (response.status === 400) {
-                        navigate("/", {replace: true});
+                        navigate("/", { replace: true });
                     } else {
-                        throw new Error(data.message);
+                        throw new Error(`Error: ${response.status}`);
                     }
+                }
+    
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    const data = await response.json();
+                    // Handle your JSON data here
+                } else {
+                    throw new Error("Response is not in JSON format");
                 }
             } catch (error) {
                 setMessage(error.message);
             }
         };
-
+    
         checkToken();
     }, [token, navigate]);
-
+    
     const handleResetPassword = async (e) => {
         e.preventDefault();
 
