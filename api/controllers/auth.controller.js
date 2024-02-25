@@ -216,7 +216,7 @@ export const requestPasswordReset = async (req, res, next) => {
 
         res
             .status(200)
-            .json({message: "Password reset instructions sent to your email."});
+            .json({success: false, message: "Password reset instructions sent to your email."});
     } catch (error) {
         next(error);
     }
@@ -239,7 +239,7 @@ export const resetPassword = async (req, res, next) => {
         const isPasswordCorrect = bcryptjs.compareSync(newPassword, user.password);
 
         if (isPasswordCorrect) {
-            return next(errorHandler(400, "New password cannot be the same."));
+            return res.status(400).json({success: false, message: "New password cannot be the same."});
         }
 
         user.password = bcryptjs.hashSync(newPassword, 10);
