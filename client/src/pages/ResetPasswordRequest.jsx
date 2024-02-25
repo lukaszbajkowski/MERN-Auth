@@ -1,15 +1,19 @@
 import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {resetPasswordFailure, resetPasswordStart, resetPasswordSuccess} from "../redux/user/userSlice";
 
 const ResetPasswordRequest = () => {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
 
-    const navigate = useNavigate();
+    const {loading, error} = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+
     const handleResetRequest = async (e) => {
         e.preventDefault();
 
         try {
+            dispatch(resetPasswordStart()); // Wysłanie akcji rozpoczęcia resetowania hasła
             const response = await fetch("/api/auth/reset-password", {
                 method: "POST",
                 headers: {
@@ -21,14 +25,12 @@ const ResetPasswordRequest = () => {
             const data = await response.json();
 
             if (response.ok) {
+                dispatch(resetPasswordSuccess(data)); // Wysłanie akcji sukcesu resetowania hasła
                 setMessage(data.message);
             } else {
+                dispatch(resetPasswordFailure(data)); // Wysłanie akcji niepowodzenia resetowania hasła
                 throw new Error(data.message);
             }
-
-            setTimeout(() => {
-                navigate("/reset-password-send");
-            }, 3000);
         } catch (error) {
             setMessage(error.message);
         }
@@ -50,14 +52,18 @@ const ResetPasswordRequest = () => {
                 />
                 <button
                     type="submit"
+                    disabled={loading}
                     className="bg-slate-700 text-white p-3 rounded-lg capitalize hover:opacity-95 disabled:opacity-80"
                 >
-                    Reset Password
+                    {loading ? "Loading..." : "Reset Password"}
                 </button>
                 <p className="text-green-700 mt-5">
                     {message}
                 </p>
             </form>
+            <p className="text-red-700 mt-5">
+                {error ? error.message || "Something went wrong!" : ""}
+            </p>
         </div>
     );
 };
