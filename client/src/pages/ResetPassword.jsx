@@ -23,7 +23,7 @@ const ResetPassword = () => {
                 const data = await response.json();
 
                 if (data.message === "Invalid or expired reset token.") {
-                    navigate("/reset-password-invalid-token");
+                    navigate("/reset-password-error");
                 } else {
                     setIsValidToken(true);
                 }

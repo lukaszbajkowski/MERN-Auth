@@ -11,6 +11,7 @@ import LoggedRoute from "./components/LoggedRoute";
 import Confirmation from "./pages/ConfirmEmail";
 import ResetPasswordRequest from "./pages/ResetPasswordRequest";
 import ResetPassword from "./pages/ResetPassword";
+import ResetPasswordError from "./pages/ResetPasswordError.jsx";
 
 export default function App () {
     return (
@@ -34,8 +35,7 @@ export default function App () {
                         path="/reset-password/:token"
                         element={<ResetPassword/>}
                     />
-                    <Route path="/reset-password-send" element={""}/>
-                    <Route path="/reset-password-error" element={""}/>
+                    <Route path="/reset-password-error" element={<ResetPasswordError/>}/>
                 </Route>
             </Routes>
         </BrowserRouter>
