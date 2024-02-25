@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [isValidToken, setIsValidToken] = useState(false);
   const { token } = useParams();
   const navigate = useNavigate();
 
@@ -22,6 +23,8 @@ const ResetPassword = () => {
 
         if (data.message === "Invalid or expired reset token.") {
           navigate("/reset-password-invalid-token", { replace: true });
+        } else {
+          setIsValidToken(true);
         }
       } catch (error) {
         console.error("Error checking token validity:", error);
@@ -61,26 +64,30 @@ const ResetPassword = () => {
 
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-semibold my-7">
-        Set up new password
-      </h1>
-      <form onSubmit={handleResetPassword} className="flex flex-col gap-4">
-        <input
-          placeholder="New Password"
-          type="password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          required
-          className="bg-slate-100 p-3 rounded-lg"
-        />
-        <button
-          type="submit"
-          className="bg-slate-700 text-white p-3 rounded-lg capitalize hover:opacity-95 disabled:opacity-80"
-        >
-          Reset Password
-        </button>
-        <p className="text-green-700 mt-2">{message}</p>
-      </form>
+      {isValidToken && (
+        <>
+          <h1 className="text-3xl text-center font-semibold my-7">
+            Set up new password
+          </h1>
+          <form onSubmit={handleResetPassword} className="flex flex-col gap-4">
+            <input
+              placeholder="New Password"
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+              className="bg-slate-100 p-3 rounded-lg"
+            />
+            <button
+              type="submit"
+              className="bg-slate-700 text-white p-3 rounded-lg capitalize hover:opacity-95 disabled:opacity-80"
+            >
+              Reset Password
+            </button>
+            <p className="text-green-700 mt-2">{message}</p>
+          </form>
+        </>
+      )}
     </div>
   );
 };
