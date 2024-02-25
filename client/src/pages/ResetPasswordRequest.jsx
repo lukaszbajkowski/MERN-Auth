@@ -1,22 +1,22 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { resetPasswordFailure, resetPasswordStart, resetPasswordSuccess } from "../redux/user/userSlice";
+import {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {resetPasswordFailure, resetPasswordStart, resetPasswordSuccess} from "../redux/user/userSlice";
 
 const ResetPasswordRequest = () => {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
+    const [messageStatus, setMessageStatus] = useState(null);
     const [lastResetTime, setLastResetTime] = useState(null);
     const [resetCount, setResetCount] = useState(0);
 
-    const { loading, error } = useSelector((state) => state.user);
+    const {loading, error} = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // Sprawdź liczbę prób i czas ostatniej próby zresetowania hasła
         const storedResetData = JSON.parse(localStorage.getItem("resetData")) || {};
-        const { lastResetTime: storedLastResetTime, count: storedResetCount } = storedResetData;
+        const {lastResetTime: storedLastResetTime, count: storedResetCount} = storedResetData;
 
-        if (storedLastResetTime && Date.now() - storedLastResetTime < 300000) { // 300000 ms = 5 minut
+        if (storedLastResetTime && Date.now() - storedLastResetTime < 300000) {
             setLastResetTime(storedLastResetTime);
             setResetCount(storedResetCount);
         }
@@ -25,15 +25,17 @@ const ResetPasswordRequest = () => {
     const handleResetRequest = async (e) => {
         e.preventDefault();
 
-        // Dodane - sprawdź, czy przekroczono limit prób
+        setEmail("");
+
         if (resetCount >= 3) {
             setMessage("You have reached the maximum number of reset attempts. Please try again later.");
+            setMessageStatus(false);
             return;
         }
 
-        // Dodane - sprawdź, czy wystąpiło opóźnienie antyspamowe
         if (lastResetTime && Date.now() - lastResetTime < 30000) {
             setMessage("Please wait before trying again.");
+            setMessageStatus(false);
             return;
         }
 
@@ -44,7 +46,7 @@ const ResetPasswordRequest = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ email }),
+                body: JSON.stringify({email}),
             });
 
             const data = await response.json();
@@ -52,10 +54,11 @@ const ResetPasswordRequest = () => {
             if (response.ok) {
                 dispatch(resetPasswordSuccess(data));
                 setMessage(data.message);
+                setMessageStatus(true);
+
                 setLastResetTime(Date.now());
                 setResetCount(resetCount + 1);
 
-                // Zapisz dane do localStorage
                 localStorage.setItem("resetData", JSON.stringify({
                     lastResetTime: Date.now(),
                     count: resetCount + 1,
@@ -66,6 +69,7 @@ const ResetPasswordRequest = () => {
             }
         } catch (error) {
             setMessage(error.message);
+            setMessageStatus(false);
         }
     };
 
@@ -90,7 +94,7 @@ const ResetPasswordRequest = () => {
                 >
                     {loading ? "Loading..." : "Reset Password"}
                 </button>
-                <p className="text-green-700 mt-5">
+                <p className={messageStatus ? "text-green-700 mt-5" : "text-red-700 mt-5"}>
                     {message}
                 </p>
             </form>
