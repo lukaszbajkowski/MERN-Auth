@@ -1,34 +1,67 @@
-import {useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {resetPasswordFailure, resetPasswordStart, resetPasswordSuccess} from "../redux/user/userSlice";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { resetPasswordFailure, resetPasswordStart, resetPasswordSuccess } from "../redux/user/userSlice";
 
 const ResetPasswordRequest = () => {
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
+    const [lastResetTime, setLastResetTime] = useState(null);
+    const [resetCount, setResetCount] = useState(0);
 
-    const {loading, error} = useSelector((state) => state.user);
+    const { loading, error } = useSelector((state) => state.user);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        // Sprawdź liczbę prób i czas ostatniej próby zresetowania hasła
+        const storedResetData = JSON.parse(localStorage.getItem("resetData")) || {};
+        const { lastResetTime: storedLastResetTime, count: storedResetCount } = storedResetData;
+
+        if (storedLastResetTime && Date.now() - storedLastResetTime < 300000) { // 300000 ms = 5 minut
+            setLastResetTime(storedLastResetTime);
+            setResetCount(storedResetCount);
+        }
+    }, []);
 
     const handleResetRequest = async (e) => {
         e.preventDefault();
 
+        // Dodane - sprawdź, czy przekroczono limit prób
+        if (resetCount >= 3) {
+            setMessage("You have reached the maximum number of reset attempts. Please try again later.");
+            return;
+        }
+
+        // Dodane - sprawdź, czy wystąpiło opóźnienie antyspamowe
+        if (lastResetTime && Date.now() - lastResetTime < 30000) {
+            setMessage("Please wait before trying again.");
+            return;
+        }
+
         try {
-            dispatch(resetPasswordStart()); // Wysłanie akcji rozpoczęcia resetowania hasła
+            dispatch(resetPasswordStart());
             const response = await fetch("/api/auth/reset-password", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({email}),
+                body: JSON.stringify({ email }),
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                dispatch(resetPasswordSuccess(data)); // Wysłanie akcji sukcesu resetowania hasła
+                dispatch(resetPasswordSuccess(data));
                 setMessage(data.message);
+                setLastResetTime(Date.now());
+                setResetCount(resetCount + 1);
+
+                // Zapisz dane do localStorage
+                localStorage.setItem("resetData", JSON.stringify({
+                    lastResetTime: Date.now(),
+                    count: resetCount + 1,
+                }));
             } else {
-                dispatch(resetPasswordFailure(data)); // Wysłanie akcji niepowodzenia resetowania hasła
+                dispatch(resetPasswordFailure(data));
                 throw new Error(data.message);
             }
         } catch (error) {
