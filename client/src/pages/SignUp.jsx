@@ -69,13 +69,16 @@ export default function SignUp () {
                 </button>
                 <OAuth/>
             </form>
-            <div className="flex gap-3 mt-5">
-                <p>Have an account?</p>
-                <Link to={`/sign-in`}>
-          <span className="text-blue-500 hover:text-blue-700 transition duration-300 ease-in-out">
-            Sign in
-          </span>
-                </Link>
+
+            <div className="flex mt-16 ">
+                <div className="mx-auto flex gap-2">
+                    <p>Have an account?</p>
+                    <Link to={`/sign-in`}>
+                      <span className="text-blue-500 hover:text-blue-700 transition duration-300 ease-in-out">
+                        Sign in
+                      </span>
+                    </Link>
+                </div>
             </div>
             <p className="text-red-700 mt-5">
                 {error}
