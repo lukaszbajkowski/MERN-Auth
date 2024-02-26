@@ -1,5 +1,7 @@
 import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {resetPasswordFailure, resetPasswordStart, resetPasswordSuccess} from "../redux/user/userSlice";
 
 const ResetPassword = () => {
     const [newPassword, setNewPassword] = useState("");
@@ -8,10 +10,13 @@ const ResetPassword = () => {
     const [isValidToken, setIsValidToken] = useState(false);
     const {token} = useParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const {loading} = useSelector((state) => state.user);
 
     useEffect(() => {
         const checkTokenValidity = async () => {
             try {
+                dispatch(resetPasswordStart());
                 const response = await fetch(`/api/auth/reset-password/${token}`, {
                     method: "POST",
                     headers: {
@@ -23,18 +28,20 @@ const ResetPassword = () => {
                 const data = await response.json();
 
                 if (data.message === "Invalid or expired reset token.") {
+                    dispatch(resetPasswordFailure(data));
                     navigate("/reset-password-error");
                 } else {
+                    dispatch(resetPasswordSuccess(data));
                     setIsValidToken(true);
                 }
             } catch (error) {
                 console.error("Error checking token validity:", error);
+                dispatch(resetPasswordFailure(error));
             }
         };
 
-        // Check token validity when component mounts
         checkTokenValidity();
-    }, [token, navigate]);
+    }, [token, navigate, dispatch]);
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
@@ -42,6 +49,7 @@ const ResetPassword = () => {
         setNewPassword("");
 
         try {
+            dispatch(resetPasswordStart());
             const response = await fetch(`/api/auth/reset-password/${token}`, {
                 method: "POST",
                 headers: {
@@ -53,6 +61,7 @@ const ResetPassword = () => {
             const data = await response.json();
 
             if (response.ok) {
+                dispatch(resetPasswordSuccess(data));
                 setMessage(data.message);
                 setMessageStatus(true);
 
@@ -60,12 +69,12 @@ const ResetPassword = () => {
                     navigate("/sign-in", {replace: true});
                 }, 3000);
             } else {
+                dispatch(resetPasswordFailure(data));
                 throw new Error(data.message);
             }
         } catch (error) {
             setMessage(error.message);
             setMessageStatus(false);
-
         }
     };
 
@@ -87,9 +96,10 @@ const ResetPassword = () => {
                         />
                         <button
                             type="submit"
+                            disabled={loading}
                             className="bg-slate-700 text-white p-3 rounded-lg capitalize hover:opacity-95 disabled:opacity-80"
                         >
-                            Reset Password
+                            {loading ? "Resetting Password..." : "Reset Password"}
                         </button>
                         <p className={messageStatus ? "text-green-700 mt-2" : "text-red-700 mt-2"}>
                             {message}

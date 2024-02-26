@@ -16,7 +16,7 @@ const ResetPasswordRequest = () => {
         const storedResetData = JSON.parse(localStorage.getItem("resetData")) || {};
         const {lastResetTime: storedLastResetTime, count: storedResetCount} = storedResetData;
 
-        if (storedLastResetTime && Date.now() - storedLastResetTime < 300000) {
+        if (storedLastResetTime && Date.now() - storedLastResetTime < 300) {
             setLastResetTime(storedLastResetTime);
             setResetCount(storedResetCount);
         }
@@ -33,9 +33,10 @@ const ResetPasswordRequest = () => {
             return;
         }
 
-        if (lastResetTime && Date.now() - lastResetTime < 30000) {
+        if (lastResetTime && Date.now() - lastResetTime < 300) {
             setMessage("Please wait before trying again.");
             setMessageStatus(false);
+
             return;
         }
 
@@ -57,12 +58,16 @@ const ResetPasswordRequest = () => {
                 setMessageStatus(true);
 
                 setLastResetTime(Date.now());
-                setResetCount(resetCount + 1);
+                setResetCount(prevResetCount => {
+                    const newResetCount = prevResetCount + 1;
 
-                localStorage.setItem("resetData", JSON.stringify({
-                    lastResetTime: Date.now(),
-                    count: resetCount + 1,
-                }));
+                    localStorage.setItem("resetData", JSON.stringify({
+                        lastResetTime: Date.now(),
+                        count: newResetCount,
+                    }));
+
+                    return newResetCount;
+                });
             } else {
                 dispatch(resetPasswordFailure(data));
                 throw new Error(data.message);
