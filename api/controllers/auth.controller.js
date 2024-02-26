@@ -39,11 +39,12 @@ export const signup = async (req, res, next) => {
             });
         }
 
+        const token = crypto.randomBytes(20).toString("hex");
+        newUser.emailConfirmedToken = token;
+        newUser.emailConfirmedExpires = Date.now() + 3600000;
+
         await newUser.save();
 
-        const token = jwt.sign({userId: newUser._id}, process.env.JWT_SECRET, {
-            expiresIn: "30m",
-        });
         const confirmationLink = `${process.env.APP_URL}/confirm-email/${token}`;
         const mailOptions = {
             from: process.env.GMAIL_USER,
@@ -70,20 +71,18 @@ export const confirmEmail = async (req, res, next) => {
     const {token} = req.params;
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.userId);
+        const user = await User.findOne({
+            emailConfirmedToken: token,
+            emailConfirmedExpires: {$gt: Date.now()},
+        });
 
         if (!user) {
-            return next(errorHandler(404, "User not found."));
-        }
-
-        if (user.emailConfirmed) {
-            return next(
-                errorHandler(400, "Email address has already been confirmed.")
-            );
+            return next(errorHandler(404, "Invalid or expired email address confirmation."));
         }
 
         user.emailConfirmed = true;
+        user.emailConfirmedToken = undefined;
+        user.emailConfirmedExpires = undefined;
         await user.save();
 
         res.status(200).json({
@@ -91,10 +90,7 @@ export const confirmEmail = async (req, res, next) => {
             message: "Email address confirmed successfully.",
         });
     } catch (error) {
-        if (error.name === "TokenExpiredError") {
-            return next(errorHandler(401, "The token has expired."));
-        }
-        return next(errorHandler(500, "Error while confirming email address."));
+        next(error)
     }
 };
 
