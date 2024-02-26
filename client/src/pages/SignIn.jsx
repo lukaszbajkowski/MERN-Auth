@@ -73,6 +73,11 @@ export default function SignIn () {
                     {loading ? "Loading..." : "Sign In"}
                 </button>
                 <OAuth/>
+                {error && (
+                    <p className="text-red-700 mt-5">
+                        {error.message || "Something went wrong!"}
+                    </p>
+                )}
             </form>
             <div className="flex mt-16 ">
                 <div className="mx-auto flex gap-2">
@@ -84,9 +89,6 @@ export default function SignIn () {
                     </Link>
                 </div>
             </div>
-            <p className="text-red-700 mt-5">
-                {error ? error.message || "Something went wrong!" : ""}
-            </p>
         </div>
     );
 }

@@ -134,6 +134,9 @@ export const google = async (req, res, next) => {
         const user = await User.findOne({email: req.body.email});
 
         if (user) {
+            if (!user.googleAccount) {
+                res.status(200).json(user);
+            } else {
             const token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
             const {password: userPassword, ...userData} = user._doc;
             const expiryDate = new Date(Date.now() + 3600000);
@@ -145,6 +148,7 @@ export const google = async (req, res, next) => {
                 })
                 .status(200)
                 .json(userData);
+            }
         } else {
             const generatedPassword =
                 Math.random().toString(36).slice(-8) +
@@ -158,6 +162,7 @@ export const google = async (req, res, next) => {
                 password: hashedPassword,
                 profilePicture: req.body.photo,
                 emailConfirmed: true,
+                googleAccount: true,
             });
 
             await newUser.save();
