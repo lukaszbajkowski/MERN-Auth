@@ -12,7 +12,14 @@ export const updateUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
     return next(errorHandler(401, "You can update only your account!"));
   }
+  
   try {
+    const user = await User.findById(req.params.id);
+
+    if (user.googleAccount) {
+      return next(errorHandler(403, "Cannot update profile for Google account."));
+    }
+
     if (req.body.password) {
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
