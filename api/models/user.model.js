@@ -25,8 +25,18 @@ const userSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
-        resetPasswordToken: {type: String},
-        resetPasswordExpires: {type: Date},
+        emailConfirmedToken: {
+            type: String
+        },
+        emailConfirmedExpires: {
+            type: Date
+        },
+        resetPasswordToken: {
+            type: String
+        },
+        resetPasswordExpires: {
+            type: Date
+        },
         googleAccount: {
             type: Boolean,
             default: false,

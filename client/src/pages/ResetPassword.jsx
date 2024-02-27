@@ -35,7 +35,6 @@ const ResetPassword = () => {
                     setIsValidToken(true);
                 }
             } catch (error) {
-                console.error("Error checking token validity:", error);
                 dispatch(resetPasswordFailure(error));
             }
         };
