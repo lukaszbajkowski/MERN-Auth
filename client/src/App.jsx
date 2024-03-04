@@ -1,5 +1,4 @@
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import React from "react";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Profile from "./pages/Profile";
@@ -12,6 +11,7 @@ import Confirmation from "./pages/ConfirmEmail";
 import ResetPasswordRequest from "./pages/ResetPasswordRequest";
 import ResetPassword from "./pages/ResetPassword";
 import ResetPasswordError from "./pages/ResetPasswordError.jsx";
+import SettingNavigation from "./components/SettingNavigation";
 
 export default function App () {
     return (
@@ -22,6 +22,7 @@ export default function App () {
                 <Route path="/about" element={<About/>}/>
                 <Route element={<PrivateRoute/>}>
                     <Route path="/profile" element={<Profile/>}/>
+                    <Route path="/account-settings" element={<SettingNavigation/>}/>
                 </Route>
                 <Route element={<LoggedRoute/>}>
                     <Route path="/sign-in" element={<SignIn/>}/>
