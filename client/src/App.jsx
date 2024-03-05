@@ -11,9 +11,14 @@ import Confirmation from "./pages/ConfirmEmail";
 import ResetPasswordRequest from "./pages/ResetPasswordRequest";
 import ResetPassword from "./pages/ResetPassword";
 import ResetPasswordError from "./pages/ResetPasswordError.jsx";
-import SettingNavigation from "./components/SettingNavigation";
 
 export default function App () {
+    const routes = [
+        {path: "/profile", element: <Profile/>},
+        {path: "/account-settings", element: <Profile/>},
+        {path: "/security-settings", element: <Profile/>},
+    ];
+
     return (
         <BrowserRouter>
             <Header/>
@@ -21,8 +26,9 @@ export default function App () {
                 <Route path="/" element={<Home/>}/>
                 <Route path="/about" element={<About/>}/>
                 <Route element={<PrivateRoute/>}>
-                    <Route path="/profile" element={<Profile/>}/>
-                    <Route path="/account-settings" element={<SettingNavigation/>}/>
+                    {routes.map((route, index) => (
+                        <Route key={index} path={route.path} element={route.element}/>
+                    ))}
                 </Route>
                 <Route element={<LoggedRoute/>}>
                     <Route path="/sign-in" element={<SignIn/>}/>
