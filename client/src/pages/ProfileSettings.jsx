@@ -1,24 +1,37 @@
-const ProfileForm = ({currentUser, formData, setImage, imageError, imagePercent, handleSubmit, fileRef, loading}) => {
+const ProfileForm = ({
+                         currentUser,
+                         formData,
+                         setImage,
+                         imageError,
+                         imagePercent,
+                         handleSubmit,
+                         handleSubmitProfilePicture,
+                         fileRef,
+                         loading,
+                         handleChange,
+                         loadingImage,
+                         loadingProfileInfo
+                     }) => {
     return (
         <>
             <div className="col-span-8 bg-slate-200 p-6 rounded-t-lg shadow-xl shadow-slate-200/50">
-                <form onSubmit={handleSubmit} className="grid grid-cols-12 gap-4">
+                <form onSubmit={handleSubmitProfilePicture} className="grid grid-cols-12 gap-4">
                     <h1 className="col-start-1 col-end-3 text-black text-start my-auto">
                         Your picture
                     </h1>
                     <p className="col-start-3 col-end-7 md:col-start-3 md:col-end-6 text-sm self-center">
                         {imageError ? (
                             <span className="text-red-700">
-                            Error uploading image (file size must be less than 5 MB)
-                        </span>
+                                Error uploading image (file size must be less than 5 MB)
+                            </span>
                         ) : imagePercent > 0 && imagePercent < 100 ? (
                             <span className="text-slate-700">
-                            {`Uploading: ${imagePercent} %`}
-                        </span>
+                                {`Uploading: ${imagePercent} %`}
+                            </span>
                         ) : imagePercent === 100 ? (
                             <span className="text-green-700">
-                            Image uploaded successfully
-                        </span>
+                                Image uploaded successfully
+                            </span>
                         ) : (
                             ""
                         )}
@@ -57,11 +70,39 @@ const ProfileForm = ({currentUser, formData, setImage, imageError, imagePercent,
                             className="bg-slate-700 text-white rounded-lg p-3 capitalize hover:opacity-95 disabled:opacity-80 w-full"
                             disabled={currentUser.googleAccount}
                         >
-                            {loading ? "Loading..." : "Update"}
+                            {loadingImage ? "Loading..." : "Update"}
                         </button>
                     </div>
                 </form>
             </div>
+            <div className="col-span-8 bg-white p-px"></div>
+            <form onSubmit={handleSubmit}>
+                <div className="col-span-8 bg-slate-200 p-6 shadow-xl shadow-slate-200/50">
+                    <span className="grid grid-cols-12 gap-4">
+                        <h1 className="col-start-1 col-end-7 text-black text-start my-auto">
+                            A few words about you
+                        </h1>
+                        <div className="md:col-start-7 col-start-1 col-end-13 flex flex-col my-auto">
+                            <textarea
+                                rows="4"
+                                defaultValue={currentUser.username}
+                                id="username"
+                                placeholder="Username"
+                                className="resize-none bg-slate-100 rounded-lg p-3 block w-full border"
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </span>
+                </div>
+                <div className="flex justify-end">
+                    <button
+                        className="bg-slate-700 text-white rounded-lg py-3 px-6 capitalize hover:opacity-95 disabled:opacity-80 me-6 mt-6"
+                        disabled={currentUser.googleAccount}
+                    >
+                        {loadingProfileInfo ? "Loading..." : "Update"}
+                    </button>
+                </div>
+            </form>
         </>
     );
 };
