@@ -49,6 +49,14 @@ export const updateUserProfilePicture = async (req, res, next) => {
     await updateUserFields(req, res, next, updateFields);
 };
 
+export const updateUserAbout = async (req, res, next) => {
+    const updateFields = {
+        aboutUser: req.body.aboutUser,
+    };
+
+    await updateUserFields(req, res, next, updateFields);
+};
+
 export const deleteUser = async (req, res, next) => {
     if (req.user.id !== req.params.id) {
         return next(errorHandler(401, "You can delete only your account!"));

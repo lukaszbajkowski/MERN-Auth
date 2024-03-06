@@ -4,7 +4,7 @@ const ProfileForm = ({
                          setImage,
                          imageError,
                          imagePercent,
-                         handleSubmit,
+                         handleSubmitAboutUser,
                          handleSubmitProfilePicture,
                          fileRef,
                          loading,
@@ -62,6 +62,7 @@ const ProfileForm = ({
                                 className="col-start-7 col-end-10 md:col-start-6 md:col-end-10 h-24 w-24 self-center cursor-pointer rounded-full object-cover ms-auto me-4"
                                 onClick={() => fileRef.current.click()}
                                 disabled={currentUser.googleAccount}
+                                loading="lazy"
                             />
                         </>
                     )}
@@ -76,7 +77,7 @@ const ProfileForm = ({
                 </form>
             </div>
             <div className="col-span-8 bg-white p-px"></div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmitAboutUser}>
                 <div className="col-span-8 bg-slate-200 p-6 shadow-xl shadow-slate-200/50">
                     <span className="grid grid-cols-12 gap-4">
                         <h1 className="col-start-1 col-end-7 text-black text-start my-auto">
@@ -85,9 +86,9 @@ const ProfileForm = ({
                         <div className="md:col-start-7 col-start-1 col-end-13 flex flex-col my-auto">
                             <textarea
                                 rows="4"
-                                defaultValue={currentUser.username}
-                                id="username"
-                                placeholder="Username"
+                                defaultValue={currentUser.aboutUser}
+                                id="aboutUser"
+                                placeholder="Tell us more about yourself"
                                 className="resize-none bg-slate-100 rounded-lg p-3 block w-full border"
                                 onChange={handleChange}
                             />
