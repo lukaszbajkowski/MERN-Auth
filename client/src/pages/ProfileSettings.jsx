@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 const ProfileForm = ({
                          currentUser,
                          formData,
@@ -59,16 +61,18 @@ const ProfileForm = ({
                             <img
                                 src={formData.profilePicture || currentUser.profilePicture}
                                 alt="profilePicture"
-                                className="col-start-7 col-end-10 md:col-start-6 md:col-end-10 h-24 w-24 self-center cursor-pointer rounded-full object-cover ms-auto me-4"
+                                className="col-start-7 col-end-10 md:col-start-6 md:col-end-10 h-24 w-24 self-center
+                                cursor-pointer rounded-full object-cover ms-auto me-4"
                                 onClick={() => fileRef.current.click()}
-                                disabled={currentUser.googleAccount}
                                 loading="lazy"
                             />
                         </>
                     )}
                     <div className="md:col-start-10 md:col-end-13 col-start-10 col-end-13 my-auto">
                         <button
-                            className="bg-slate-700 text-white rounded-lg p-3 capitalize hover:opacity-95 disabled:opacity-80 w-full"
+                            className="bg-slate-700 text-white rounded-lg p-3 capitalize shadow-md shadow-slate-700-50
+                            transition duration-300 ease-in-out hover:transition hover:duration-300 hover:ease-in-out
+                            hover:opacity-95 disabled:opacity-80 w-full"
                             disabled={currentUser.googleAccount}
                         >
                             {loadingImage ? "Loading..." : "Update"}
@@ -97,7 +101,9 @@ const ProfileForm = ({
                 </div>
                 <div className="flex justify-end">
                     <button
-                        className="bg-slate-700 text-white rounded-lg py-3 px-6 capitalize hover:opacity-95 disabled:opacity-80 me-6 mt-6"
+                        className="bg-slate-700 text-white rounded-lg py-3 px-6 capitalize shadow-md shadow-slate-700-50
+                         transition duration-300 ease-in-out hover:transition hover:duration-300 hover:ease-in-out
+                         hover:opacity-95 disabled:opacity-80 me-6 mt-6"
                         disabled={currentUser.googleAccount}
                     >
                         {loadingProfileInfo ? "Loading..." : "Update"}
@@ -106,6 +112,21 @@ const ProfileForm = ({
             </form>
         </>
     );
+};
+
+ProfileForm.propTypes = {
+    currentUser: PropTypes.object.isRequired,
+    formData: PropTypes.object.isRequired,
+    setImage: PropTypes.func.isRequired,
+    imageError: PropTypes.string,
+    imagePercent: PropTypes.number,
+    handleSubmitAboutUser: PropTypes.func.isRequired,
+    handleSubmitProfilePicture: PropTypes.func.isRequired,
+    fileRef: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    loadingImage: PropTypes.bool.isRequired,
+    loadingProfileInfo: PropTypes.bool.isRequired
 };
 
 export default ProfileForm;
