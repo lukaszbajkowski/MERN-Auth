@@ -45,8 +45,7 @@ const userSchema = new mongoose.Schema(
             default: false,
         },
         city: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "City",
+            type: String,
         },
     },
     {timestamps: true}

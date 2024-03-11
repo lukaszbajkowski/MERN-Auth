@@ -6,10 +6,10 @@ const ProfileForm = ({
                          setImage,
                          imageError,
                          imagePercent,
-                         handleSubmitAboutUser,
+                         handleSubmitUser,
                          handleSubmitProfilePicture,
                          fileRef,
-                         loading,
+                         // loading,
                          handleChange,
                          loadingImage,
                          loadingProfileInfo
@@ -81,8 +81,8 @@ const ProfileForm = ({
                 </form>
             </div>
             <div className="col-span-8 bg-white p-px"></div>
-            <form onSubmit={handleSubmitAboutUser}>
-                <div className="col-span-8 bg-slate-200 p-6 shadow-xl shadow-slate-200/50">
+            <form onSubmit={handleSubmitUser}>
+                <div className="col-span-8 bg-slate-200 p-6 rounded-b-lg shadow-xl shadow-slate-200/50 ">
                     <span className="grid grid-cols-12 gap-4">
                         <h1 className="col-start-1 col-end-7 text-black text-start my-auto">
                             A few words about you
@@ -93,9 +93,26 @@ const ProfileForm = ({
                                 defaultValue={currentUser.aboutUser}
                                 id="aboutUser"
                                 placeholder="Tell us more about yourself"
-                                className="resize-none bg-slate-100 rounded-lg p-3 block w-full border"
+                                className="resize-none bg-slate-100 rounded-lg p-2.5 block w-full border border-gray-300 text-gray-900 text-sm block w-full"
                                 onChange={handleChange}
                             />
+                        </div>
+                    </span>
+                </div>
+                <div className="col-span-8 bg-slate-200 p-6 mt-12 rounded-t-lg shadow-xl shadow-slate-200/50">
+                    <span className="grid grid-cols-12 gap-4">
+                        <h1 className="col-start-1 col-end-7 text-black text-start my-auto">
+                            City
+                        </h1>
+                        <div className="md:col-start-7 col-start-1 col-end-13 flex flex-col my-auto">
+                            <select id="city" className="appearance-none bg-slate-100 rounded-lg border border-gray-300 text-gray-900 text-sm block w-full p-2.5 "
+                                    defaultValue={currentUser.city} onChange={handleChange}>
+                                {!currentUser.city && <option disabled selected>Choose a country</option>}
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="FR">France</option>
+                                <option value="DE">Germany</option>
+                            </select>
                         </div>
                     </span>
                 </div>
@@ -118,12 +135,12 @@ ProfileForm.propTypes = {
     currentUser: PropTypes.object.isRequired,
     formData: PropTypes.object.isRequired,
     setImage: PropTypes.func.isRequired,
-    imageError: PropTypes.string,
+    imageError: PropTypes.bool,
     imagePercent: PropTypes.number,
-    handleSubmitAboutUser: PropTypes.func.isRequired,
+    handleSubmitUser: PropTypes.func.isRequired,
     handleSubmitProfilePicture: PropTypes.func.isRequired,
     fileRef: PropTypes.object.isRequired,
-    loading: PropTypes.bool.isRequired,
+    loading: PropTypes.bool,
     handleChange: PropTypes.func.isRequired,
     loadingImage: PropTypes.bool.isRequired,
     loadingProfileInfo: PropTypes.bool.isRequired
