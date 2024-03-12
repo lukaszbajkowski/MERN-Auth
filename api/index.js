@@ -6,6 +6,8 @@ import authRoutes from "./routes/auth.route.js";
 import cookieParser from "cookie-parser";
 import path from "path";
 import cors from 'cors';
+import User from "./models/user.model.js";
+import City from "./models/city.model.js";
 
 dotenv.config();
 
@@ -21,6 +23,15 @@ mongoose
 const __dirname = path.resolve();
 
 const app = express();
+
+app.get("/api/data", async (req, res, next) => {
+  try {
+    const cities = await City.find();
+    res.status(200).json(cities);
+  } catch (error) {
+    next(error);
+  }
+});
 
 app.use(express.static(path.join(__dirname, "/client")));
 

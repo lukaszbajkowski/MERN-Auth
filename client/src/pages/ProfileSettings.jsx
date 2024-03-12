@@ -12,7 +12,8 @@ const ProfileForm = ({
                          // loading,
                          handleChange,
                          loadingImage,
-                         loadingProfileInfo
+                         loadingProfileInfo,
+                         cities
                      }) => {
     return (
         <>
@@ -39,7 +40,8 @@ const ProfileForm = ({
                         )}
                     </p>
                     {currentUser.googleAccount ? (
-                        <div className="h-24 w-24 self-center mt-2">
+                        <div className="col-start-7 col-end-10 md:col-start-6 md:col-end-10 h-24 w-24 self-center
+                                cursor-pointer rounded-full object-cover ms-auto me-4">
                             {currentUser.profilePicture && (
                                 <img
                                     src={currentUser.profilePicture}
@@ -105,13 +107,19 @@ const ProfileForm = ({
                             City
                         </h1>
                         <div className="md:col-start-7 col-start-1 col-end-13 flex flex-col my-auto">
-                            <select id="city" className="appearance-none bg-slate-100 rounded-lg border border-gray-300 text-gray-900 text-sm block w-full p-2.5 "
-                                    defaultValue={currentUser.city} onChange={handleChange}>
-                                {!currentUser.city && <option disabled selected>Choose a country</option>}
-                                <option value="US">United States</option>
-                                <option value="CA">Canada</option>
-                                <option value="FR">France</option>
-                                <option value="DE">Germany</option>
+                            <select
+                                id="city"
+                                name="city"
+                                onChange={handleChange}
+                                value={currentUser.city}
+                                aria-label={`123213`}
+                                className="appearance-none bg-slate-100 rounded-lg border border-gray-300 text-gray-900 text-sm block w-full p-2.5 "
+                            >
+                                {cities.map(city => (
+                                    <option key={city._id} value={city._id}>
+                                        {city.name}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </span>
@@ -143,7 +151,8 @@ ProfileForm.propTypes = {
     loading: PropTypes.bool,
     handleChange: PropTypes.func.isRequired,
     loadingImage: PropTypes.bool.isRequired,
-    loadingProfileInfo: PropTypes.bool.isRequired
+    loadingProfileInfo: PropTypes.bool.isRequired,
+    cities: PropTypes.array.isRequired,
 };
 
 export default ProfileForm;
