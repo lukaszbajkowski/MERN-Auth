@@ -11,6 +11,10 @@ const citySchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    country: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Country'
+    }
 });
 
 const City = mongoose.model("City", citySchema);

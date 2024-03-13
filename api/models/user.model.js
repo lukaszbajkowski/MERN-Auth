@@ -48,6 +48,10 @@ const userSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "City",
         },
+         country: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Country",
+        },
     },
     {timestamps: true}
 );
