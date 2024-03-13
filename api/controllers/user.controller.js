@@ -48,7 +48,8 @@ export const updateUserProfilePicture = async (req, res, next) => {
 export const updateUserAbout = async (req, res, next) => {
     const updateFields = {
         aboutUser: req.body.aboutUser,
-        city: req.body.city
+        city: req.body.city,
+        country: req.body.country,
     };
 
     await updateUserFields(req, res, next, updateFields);
