@@ -47,10 +47,12 @@ const userSchema = new mongoose.Schema(
         city: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "City",
+            default: '65f1be260bfe769bf6cd020a'
         },
-         country: {
+        country: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Country",
+            default: '65f1be220bfe769bf6cd0203'
         },
     },
     {timestamps: true}
