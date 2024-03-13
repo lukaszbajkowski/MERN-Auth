@@ -19,39 +19,44 @@ const ProfileForm = ({
         <>
             <div className="col-span-8 bg-slate-200 p-6 rounded-t-lg shadow-xl shadow-slate-200/50">
                 <form onSubmit={handleSubmitProfilePicture} className="grid grid-cols-12 gap-4">
-                    <h1 className="col-start-1 col-end-3 text-black text-start my-auto">
-                        Your picture
-                    </h1>
-                    <p className="col-start-3 col-end-7 md:col-start-3 md:col-end-6 text-sm self-center">
-                        {imageError ? (
-                            <span className="text-red-700">
-                                Error uploading image (file size must be less than 5 MB)
-                            </span>
-                        ) : imagePercent > 0 && imagePercent < 100 ? (
-                            <span className="text-slate-700">
-                                {`Uploading: ${imagePercent} %`}
-                            </span>
-                        ) : imagePercent === 100 ? (
-                            <span className="text-green-700">
-                                Image uploaded successfully
-                            </span>
-                        ) : (
-                            ""
-                        )}
-                    </p>
                     {currentUser.googleAccount ? (
-                        <div className="col-start-7 col-end-10 md:col-start-6 md:col-end-10 h-24 w-24 self-center
-                                cursor-pointer rounded-full object-cover ms-auto me-4">
-                            {currentUser.profilePicture && (
-                                <img
-                                    src={currentUser.profilePicture}
-                                    alt="profilePicture"
-                                    className="h-full w-full rounded-full object-cover"
-                                />
-                            )}
-                        </div>
+                        <>
+                            <h1 className="col-start-1 col-end-6 text-black text-start my-auto">
+                                Your picture
+                            </h1>
+                            <div className="col-start-6 col-end-13 h-24 w-24 self-center
+                                cursor-default rounded-full object-cover ms-auto me-8">
+                                {currentUser.profilePicture && (
+                                    <img
+                                        src={currentUser.profilePicture}
+                                        alt="profilePicture"
+                                        className="h-full w-full rounded-full object-cover"
+                                    />
+                                )}
+                            </div>
+                        </>
                     ) : (
                         <>
+                            <h1 className="col-start-1 col-end-3 text-black text-start my-auto">
+                                Your picture
+                            </h1>
+                            <p className="col-start-3 col-end-7 md:col-start-3 md:col-end-6 text-sm self-center">
+                                {imageError ? (
+                                    <span className="text-red-700">
+                                        Error uploading image (file size must be less than 5 MB)
+                                    </span>
+                                ) : imagePercent > 0 && imagePercent < 100 ? (
+                                    <span className="text-slate-700">
+                                        {`Uploading: ${imagePercent} %`}
+                                    </span>
+                                ) : imagePercent === 100 ? (
+                                    <span className="text-green-700">
+                                        Image uploaded successfully
+                                    </span>
+                                ) : (
+                                    ""
+                                )}
+                            </p>
                             <input
                                 type="file"
                                 ref={fileRef}
@@ -68,18 +73,18 @@ const ProfileForm = ({
                                 onClick={() => fileRef.current.click()}
                                 loading="lazy"
                             />
-                        </>
-                    )}
-                    <div className="md:col-start-10 md:col-end-13 col-start-10 col-end-13 my-auto">
-                        <button
-                            className="bg-slate-700 text-white rounded-lg p-3 capitalize shadow-md shadow-slate-700-50
+                            <div className="md:col-start-10 md:col-end-13 col-start-10 col-end-13 my-auto">
+                                <button
+                                    className="bg-slate-700 text-white rounded-lg p-3 capitalize shadow-md shadow-slate-700-50
                             transition duration-300 ease-in-out hover:transition hover:duration-300 hover:ease-in-out
                             hover:opacity-95 disabled:opacity-80 w-full"
-                            disabled={currentUser.googleAccount}
-                        >
-                            {loadingImage ? "Loading..." : "Update"}
-                        </button>
-                    </div>
+                                    disabled={currentUser.googleAccount}
+                                >
+                                    {loadingImage ? "Loading..." : "Update"}
+                                </button>
+                            </div>
+                        </>
+                    )}
                 </form>
             </div>
             <div className="col-span-8 bg-white p-px"></div>
@@ -112,7 +117,6 @@ const ProfileForm = ({
                                 name="city"
                                 onChange={handleChange}
                                 value={currentUser.city}
-                                aria-label={`123213`}
                                 className="appearance-none bg-slate-100 rounded-lg border border-gray-300 text-gray-900 text-sm block w-full p-2.5 "
                             >
                                 {cities.map(city => (
@@ -129,7 +133,6 @@ const ProfileForm = ({
                         className="bg-slate-700 text-white rounded-lg py-3 px-6 capitalize shadow-md shadow-slate-700-50
                          transition duration-300 ease-in-out hover:transition hover:duration-300 hover:ease-in-out
                          hover:opacity-95 disabled:opacity-80 me-6 mt-6"
-                        disabled={currentUser.googleAccount}
                     >
                         {loadingProfileInfo ? "Loading..." : "Update"}
                     </button>

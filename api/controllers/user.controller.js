@@ -10,10 +10,6 @@ const updateUserFields = async (req, res, next, updateFields) => {
             return next(errorHandler(404, "User not found"));
         }
 
-        if (user.googleAccount) {
-            return next(errorHandler(403, "Cannot update profile for Google account."));
-        }
-
         if (req.body.password) {
             req.body.password = bcryptjs.hashSync(req.body.password, 10);
         }
