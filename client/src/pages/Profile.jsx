@@ -27,26 +27,12 @@ export default function Profile () {
     const [passwordField, setPasswordField] = useState("");
     const [loadingImage, setLoadingImage] = useState(false);
     const [loadingProfileInfo, setLoadingProfileInfo] = useState(false);
-    const [cities, setCities] = useState([]);
-
     const location = useLocation();
 
     useEffect(() => {
         if (image) {
             handleFileUpload(image);
         }
-
-        const fetchCities = async () => {
-            try {
-                const response = await fetch("/api/data");
-                const data = await response.json();
-                setCities(data);
-            } catch (error) {
-                console.error("Error fetching cities:", error);
-            }
-        };
-
-        fetchCities();
     }, [image]);
 
     const handleFileUpload = async (image) => {
@@ -217,7 +203,6 @@ export default function Profile () {
                         loadingImage={loadingImage}
                         loadingProfileInfo={loadingProfileInfo}
                         handleChange={handleChange}
-                        cities={cities}
                     />,
         },
         '/account-settings': {
