@@ -216,7 +216,6 @@ export default function Profile () {
     const currentPath = location.pathname;
     const currentPathConfig = pathConfig[currentPath] || pathConfig['/default'];
 
-
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 m-4">

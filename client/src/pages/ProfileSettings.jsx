@@ -28,10 +28,10 @@ const ProfileForm = ({
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const countriesResponse = await axios.get("/api/country");
+                const countriesResponse = await axios.get("/api/location/countries");
                 setCountries(countriesResponse.data);
 
-                const citiesResponse = await axios.get(`/api/country/${currentUser.country}`);
+                const citiesResponse = await axios.get(`/api/location/cities/${currentUser.country}`);
                 setCities(citiesResponse.data);
             } catch (error) {
                 console.error("Błąd podczas pobierania danych:", error);
@@ -52,7 +52,7 @@ const ProfileForm = ({
         setSelectedCountry(selectedCountryValue);
 
         try {
-            const citiesResponse = await axios.get(`/api/country/${selectedCountryValue}`);
+            const citiesResponse = await axios.get(`/api/location/cities/${selectedCountryValue}`);
             setCities(citiesResponse.data);
             handleChange(e);
         } catch (error) {
@@ -124,7 +124,6 @@ ProfileForm.propTypes = {
     handleChange: PropTypes.func.isRequired,
     loadingImage: PropTypes.bool.isRequired,
     loadingProfileInfo: PropTypes.bool.isRequired,
-    cities: PropTypes.array.isRequired,
 };
 
 export default ProfileForm;
