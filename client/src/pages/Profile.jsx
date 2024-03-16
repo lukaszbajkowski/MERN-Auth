@@ -28,6 +28,7 @@ export default function Profile () {
     const [loadingImage, setLoadingImage] = useState(false);
     const [loadingProfileInfo, setLoadingProfileInfo] = useState(false);
     const location = useLocation();
+    const [showCity, setShowCity] = useState(currentUser.showCity);
 
     useEffect(() => {
         if (image) {
@@ -73,6 +74,10 @@ export default function Profile () {
         setFormData({...formData, [e.target.id]: e.target.value});
     };
 
+    const handleShowCityChange = (checked) => {
+        setShowCity(checked);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -111,7 +116,7 @@ export default function Profile () {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify({ ...formData, showCity }),
             });
 
             const data = await res.json();
@@ -203,6 +208,8 @@ export default function Profile () {
                         loadingImage={loadingImage}
                         loadingProfileInfo={loadingProfileInfo}
                         handleChange={handleChange}
+                        handleShowCityChange={handleShowCityChange}
+                        showCity={showCity}
                     />,
         },
         '/account-settings': {

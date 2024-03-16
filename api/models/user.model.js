@@ -49,6 +49,10 @@ const userSchema = new mongoose.Schema(
             ref: "City",
             default: '65f1be260bfe769bf6cd020a'
         },
+        showCity: {
+          type: Boolean,
+          default: true,
+        },
         country: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Country",

@@ -2,6 +2,7 @@ import AboutUserTextarea from './AboutUserTextarea';
 import CountrySelect from './CountrySelect';
 import CitySelect from './CitySelect';
 import PropTypes from 'prop-types';
+import ShowCitySwitch from "./ShowCitySwitch.jsx";
 
 const UserForm = ({
                       currentUser,
@@ -14,6 +15,8 @@ const UserForm = ({
                       handleCityChange,
                       loadingProfileInfo,
                       handleSubmitUser,
+                      showCity,
+                      handleShowCityChange,
                   }) => {
     return (
         <>
@@ -45,11 +48,20 @@ const UserForm = ({
                     />
                 </div>
             </div>
+            <div className="col-span-8 bg-white p-px"></div>
+            <div className="col-span-8 bg-slate-200 p-6 shadow-xl shadow-slate-200/50">
+                <div className="grid grid-cols-12 gap-4">
+                    <ShowCitySwitch
+                        checked={showCity}
+                        onChange={handleShowCityChange}
+                    />
+                </div>
+            </div>
             <div className="flex justify-end">
                 <button
                     className="bg-slate-700 text-white rounded-lg py-3 px-6 capitalize shadow-md shadow-slate-700-50
-            transition duration-300 ease-in-out hover:transition hover:duration-300 hover:ease-in-out hover:opacity-95
-             disabled:opacity-80 me-6 mt-6"
+                    transition duration-300 ease-in-out hover:transition hover:duration-300 hover:ease-in-out
+                    hover:opacity-95 disabled:opacity-80 me-6 mt-6"
                     disabled={loadingProfileInfo}
                     onClick={handleSubmitUser}
                 >
@@ -71,6 +83,8 @@ UserForm.propTypes = {
     handleCityChange: PropTypes.func.isRequired,
     loadingProfileInfo: PropTypes.bool.isRequired,
     handleSubmitUser: PropTypes.func.isRequired,
+    showCity: PropTypes.bool.isRequired,
+    handleShowCityChange: PropTypes.func.isRequired,
 };
 
 export default UserForm;

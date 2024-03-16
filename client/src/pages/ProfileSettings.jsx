@@ -18,6 +18,8 @@ const ProfileForm = ({
                          handleChange,
                          loadingImage,
                          loadingProfileInfo,
+                         handleShowCityChange,
+                         showCity
                      }) => {
 
     const [countries, setCountries] = useState([]);
@@ -105,6 +107,8 @@ const ProfileForm = ({
                     handleCityChange={handleCityChange}
                     loadingProfileInfo={loadingProfileInfo}
                     handleSubmitUser={handleSubmitUser}
+                    showCity={showCity}
+                    handleShowCityChange={handleShowCityChange}
                 />
             </form>
         </>
@@ -124,6 +128,8 @@ ProfileForm.propTypes = {
     handleChange: PropTypes.func.isRequired,
     loadingImage: PropTypes.bool.isRequired,
     loadingProfileInfo: PropTypes.bool.isRequired,
+    showCity: PropTypes.bool.isRequired,
+    handleShowCityChange: PropTypes.func.isRequired,
 };
 
 export default ProfileForm;
