@@ -8,10 +8,16 @@ const ShowCitySwitch = ({checked, onChange}) => {
                 Show city in profile
             </h1>
             <div className="md:col-start-7 col-start-1 col-end-13 flex flex-col my-auto">
-                <div className="md:col-start-7 col-start-1 col-end-13 flex flex-col my-auto">
+                <div className="md:col-start-7 col-start-1 col-end-13 flex flex-col ms-auto my-auto">
                     <Switch
                         checked={checked}
                         onChange={onChange}
+                        handleDiameter={24}
+                        height={30}
+                        width={60}
+                        offColor={'#D1D5DB'}
+                        uncheckedIcon={false}
+                        checkedIcon={false}
                     />
                 </div>
             </div>
