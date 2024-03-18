@@ -12,6 +12,7 @@ import ResetPasswordRequest from "./pages/ResetPasswordRequest";
 import ResetPassword from "./pages/ResetPassword";
 import ResetPasswordError from "./pages/ResetPasswordError.jsx";
 import Personalization from "./pages/Personalization.jsx";
+import Share from "./pages/Share.jsx";
 
 export default function App () {
     const routes = [
@@ -19,6 +20,7 @@ export default function App () {
         {path: "/account-settings", element: <Profile/>},
         {path: "/security-settings", element: <Profile/>},
         {path: "/personalization", element: <Personalization/>},
+        {path: "/share", element: <Share/>}
     ];
 
     return (
