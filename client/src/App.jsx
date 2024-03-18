@@ -11,12 +11,14 @@ import Confirmation from "./pages/ConfirmEmail";
 import ResetPasswordRequest from "./pages/ResetPasswordRequest";
 import ResetPassword from "./pages/ResetPassword";
 import ResetPasswordError from "./pages/ResetPasswordError.jsx";
+import Personalization from "./pages/Personalization.jsx";
 
 export default function App () {
     const routes = [
         {path: "/profile", element: <Profile/>},
         {path: "/account-settings", element: <Profile/>},
         {path: "/security-settings", element: <Profile/>},
+        {path: "/personalization", element: <Personalization/>},
     ];
 
     return (
