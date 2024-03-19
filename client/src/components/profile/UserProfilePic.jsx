@@ -44,12 +44,12 @@ const UserProfilePic = ({
             <img
                 src={formData.profilePicture || currentUser.profilePicture}
                 alt="profilePicture"
-                className="col-start-7 col-end-10 md:col-start-6 md:col-end-10 h-24 w-24 self-center cursor-pointer
+                className="col-start-7 col-end-10 md:col-start-6 h-24 w-24 self-center cursor-pointer
                 rounded-full object-cover ms-auto me-4"
                 onClick={handleFileClick}
                 loading="lazy"
             />
-            <div className="md:col-start-10 md:col-end-13 col-start-10 col-end-13 my-auto">
+            <div className="col-start-10 col-end-13 my-auto">
                 <button
                     className="bg-slate-700 text-white rounded-lg p-3 capitalize shadow-md shadow-slate-700-50
                     transition duration-300 ease-in-out hover:transition hover:duration-300 hover:ease-in-out
