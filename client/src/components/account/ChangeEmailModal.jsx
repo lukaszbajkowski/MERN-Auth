@@ -29,8 +29,8 @@ const ChangeEmailModal = ({showModal, closeModal, showSuccessMessage, error}) =>
                         leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
                         <div
-                            className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
-                            <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4 sm:flex sm:items-start">
+                            className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full mx-6 sm:mx-0">
+                            <div className="bg-white px-4 pb-6 pt-5 sm:p-6 sm:flex sm:items-start">
                                 <div
                                     className={`${error && 'bg-red-100'} ${showSuccessMessage && 'bg-green-100'} mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full sm:mx-0 sm:h-10 sm:w-10`}>
                                     {error && (
@@ -40,19 +40,24 @@ const ChangeEmailModal = ({showModal, closeModal, showSuccessMessage, error}) =>
                                         <CheckCircleIcon className="h-6 w-6 text-green-700" aria-hidden="true"/>
                                     )}
                                 </div>
-                                <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                <button
+                                    type="button"
+                                    className="text-gray-400 hover:text-gray-600 focus:outline-none ml-2 absolute right-0 top-0 me-4 mt-4 block sm:hidden"
+                                    onClick={closeModal}
+                                >
+                                    <XMarkIcon className="h-6 w-6"/>
+                                </button>
+                                <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left sm:w-full">
                                     <Dialog.Title as="h3"
-                                                  className="text-lg leading-6 font-medium text-gray-900 flex justify-between">
-                                            <span>
-                                                {showSuccessMessage && "Email został zmieniony pomyślnie"}
-                                                {error && "Email nie został zmieniony"}
-                                            </span>
+                                                  className="text-lg leading-6 font-medium text-gray-900 sm:flex sm:justify-between">
+                                        {showSuccessMessage && "Email został zmieniony pomyślnie"}
+                                        {error && "Email nie został zmieniony"}
                                         <button
                                             type="button"
-                                            className="text-gray-400 hover:text-gray-600 focus:outline-none ml-2 float-right"
+                                            className="text-gray-400 hover:text-gray-600 focus:outline-none ml-2 float-right hidden sm:block"
                                             onClick={closeModal}
                                         >
-                                            <XMarkIcon className="h-6 w-6"/>
+                                            <XMarkIcon className="h-6 w-6 float-end"/>
                                         </button>
                                     </Dialog.Title>
                                     <div className="mt-2">
