@@ -25,9 +25,11 @@ const AccountForm = ({currentUser, handleSubmit, handleChange, passwordField,}) 
             <div className="col-span-8 bg-white p-px"></div>
             <div className="col-span-8 bg-slate-200 p-6 shadow-xl shadow-slate-200/50">
                 <div className="grid grid-cols-12 gap-4">
-                    <h1 className={`col-start-1 md:col-end-${currentUser.googleAccount ? '7' : '5'} lg:col-end-${currentUser.googleAccount ? '7' : '6'} text-black text-start my-auto`}>
-                        Email
-                    </h1>
+                    <div className={`col-start-1 md:col-end-${currentUser.googleAccount ? '7' : '5'} lg:col-end-${currentUser.googleAccount ? '7' : '6'} text-black text-start my-auto`}>
+                        <h1>
+                            Email
+                        </h1>
+                    </div>
                     <div
                         className={`col-start-1 md:col-start-${currentUser.googleAccount ? '7' : '5'} lg:col-start-${currentUser.googleAccount ? '7' : '6'} col-end-${currentUser.googleAccount ? '13' : '10'} flex flex-col my-auto`}>
                         <div className="grid grid-cols-12">
