@@ -39,11 +39,12 @@ export default function App () {
                     {routes.map((route, index) => (
                         <Route key={index} path={route.path} element={route.element}/>
                     ))}
-                </Route>
-                <Route element={<NoGooogleAccountRoute/>}>
-                    {noGoogleAccountsRoutes.map((noGoogleAccountsRoutes, index) => (
-                        <Route key={index} path={noGoogleAccountsRoutes.path} element={noGoogleAccountsRoutes.element}/>
-                    ))}
+                    <Route element={<NoGooogleAccountRoute/>}>
+                        {noGoogleAccountsRoutes.map((noGoogleAccountsRoutes, index) => (
+                            <Route key={index} path={noGoogleAccountsRoutes.path}
+                                   element={noGoogleAccountsRoutes.element}/>
+                        ))}
+                    </Route>
                 </Route>
                 <Route element={<LoggedRoute/>}>
                     <Route path="/sign-in" element={<SignIn/>}/>
