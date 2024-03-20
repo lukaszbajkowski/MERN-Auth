@@ -13,6 +13,7 @@ import ResetPassword from "./pages/ResetPassword";
 import ResetPasswordError from "./pages/ResetPasswordError.jsx";
 import Personalization from "./pages/Personalization.jsx";
 import Share from "./pages/Share.jsx";
+import NoGooogleAccountRoute from "./components/NoGooogleAccountRoute.jsx";
 
 export default function App () {
     const routes = [
@@ -20,8 +21,13 @@ export default function App () {
         {path: "/account-settings", element: <Profile/>},
         {path: "/security-settings", element: <Profile/>},
         {path: "/personalization", element: <Personalization/>},
-        {path: "/share", element: <Share/>}
+        {path: "/share", element: <Share/>},
+        {path: "/change/email", element: <Profile/>},
     ];
+
+    const noGoogleAccountsRoutes = [
+        {path: "/account-settings/change/email", element: <Profile/>},
+    ]
 
     return (
         <BrowserRouter>
@@ -32,6 +38,11 @@ export default function App () {
                 <Route element={<PrivateRoute/>}>
                     {routes.map((route, index) => (
                         <Route key={index} path={route.path} element={route.element}/>
+                    ))}
+                </Route>
+                <Route element={<NoGooogleAccountRoute/>}>
+                    {noGoogleAccountsRoutes.map((noGoogleAccountsRoutes, index) => (
+                        <Route key={index} path={noGoogleAccountsRoutes.path} element={noGoogleAccountsRoutes.element}/>
                     ))}
                 </Route>
                 <Route element={<LoggedRoute/>}>
