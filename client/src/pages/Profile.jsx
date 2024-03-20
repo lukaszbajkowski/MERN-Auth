@@ -6,7 +6,6 @@ import {
     deleteUserFailure,
     deleteUserStart,
     deleteUserSuccess,
-    signOut,
     updateUserFailure,
     updateUserStart,
     updateUserSuccess,
@@ -14,6 +13,8 @@ import {
 import SettingNavigation from "../components/SettingNavigation";
 import {useLocation} from "react-router-dom";
 import ProfileForm from "./ProfileSettings.jsx";
+import AccountForm from "./AccountSettings.jsx";
+import ChangeEmail from "./ChangeEmail.jsx";
 
 export default function Profile () {
     const dispatch = useDispatch();
@@ -100,6 +101,11 @@ export default function Profile () {
 
             dispatch(updateUserSuccess(data));
             setUpdateSuccess(true);
+            setPasswordField("");
+
+            setTimeout(() => {
+                setUpdateSuccess(false);
+            }, 5000);
         } catch (error) {
             dispatch(updateUserFailure(error));
         }
@@ -116,7 +122,7 @@ export default function Profile () {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ ...formData, showCity }),
+                body: JSON.stringify({...formData, showCity}),
             });
 
             const data = await res.json();
@@ -187,28 +193,72 @@ export default function Profile () {
     const pathConfig = {
         '/profile': {
             content:
-                <ProfileForm
-                        currentUser={currentUser}
-                        formData={formData}
-                        setImage={setImage}
-                        imageError={imageError}
-                        imagePercent={imagePercent}
-                        handleSubmitUser={handleSubmitUser}
-                        handleSubmitProfilePicture={handleSubmitProfilePicture}
-                        fileRef={fileRef}
-                        loadingImage={loadingImage}
-                        loadingProfileInfo={loadingProfileInfo}
-                        handleChange={handleChange}
-                        handleShowCityChange={handleShowCityChange}
-                        showCity={showCity}
-                    />,
+                <>
+                    <div className="row-span-3 md:col-span-4 p-4 pb-0">
+                        <SettingNavigation/>
+                    </div>
+                    <div className="row-span-3 md:col-span-8 p-4">
+                        <ProfileForm
+                            currentUser={currentUser}
+                            formData={formData}
+                            setImage={setImage}
+                            imageError={imageError}
+                            imagePercent={imagePercent}
+                            handleSubmitUser={handleSubmitUser}
+                            handleSubmitProfilePicture={handleSubmitProfilePicture}
+                            fileRef={fileRef}
+                            loadingImage={loadingImage}
+                            loadingProfileInfo={loadingProfileInfo}
+                            handleChange={handleChange}
+                            handleShowCityChange={handleShowCityChange}
+                            showCity={showCity}
+                        />
+                    </div>
+                </>
+            ,
         },
         '/account-settings': {
-            content: <div className="col-span-8 bg-blue-500">4</div>,
+            content:
+                <>
+                    <div className="row-span-3 md:col-span-4 p-4 pb-0">
+                        <SettingNavigation/>
+                    </div>
+                    <div className="row-span-3 md:col-span-8 p-4">
+                        <AccountForm
+                            currentUser={currentUser}
+                            handleSubmit={handleSubmit}
+                            handleChange={handleChange}
+                            passwordField={passwordField}
+                        />
+                    </div>
+                </>,
         },
         '/security-settings': {
-            content: <div className="col-span-8 bg-blue-500">6</div>,
+            content:
+                <>
+                    <div className="row-span-3 md:col-span-4 p-4 pb-0">
+                        <SettingNavigation/>
+                    </div>
+                    <div className="row-span-3 md:col-span-8 p-4">
+                        <div className="col-span-8 bg-blue-500">6</div>
+                    </div>
+                </>
+            ,
         },
+        '/change/email': {
+            content:
+            <div className="row-span-3 md:col-span-12 p-4">
+                <ChangeEmail
+                    currentUser={currentUser}
+                    handleSubmit={handleSubmit}
+                    handleChange={handleChange}
+                    updateSuccess={updateSuccess}
+                    loading={loading}
+                    error={error}
+                />
+            </div>
+            ,
+        }
     };
 
     const currentPath = location.pathname;
@@ -217,119 +267,61 @@ export default function Profile () {
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 m-4">
-                <div className="row-span-3 md:col-span-4 p-4 pb-0">
-                    <SettingNavigation/>
-                </div>
-                <div className="row-span-3 md:col-span-8 p-4">
-                    {currentPathConfig.content}
-                </div>
+                {currentPathConfig.content}
             </div>
-                 <span
-              onClick={handleDeleteAccount}
-              className="text-red-700 cursor-pointer"
+            <span
+                onClick={handleDeleteAccount}
+                className="text-red-700 cursor-pointer"
             >
               Delete Account
             </span>
+            {/*<div className="p-3 max-w-lg mx-auto">*/}
+            {/*    <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>*/}
+            {/*    <form onSubmit={handleSubmit} className="flex flex-col gap-4">*/}
+            {/*        <input*/}
+            {/*            defaultValue={currentUser.username}*/}
+            {/*            type="text"*/}
+            {/*            id="username"*/}
+            {/*            placeholder="Username"*/}
+            {/*            className="bg-slate-100 rounded-lg p-3"*/}
+            {/*            onChange={handleChange}*/}
+            {/*            disabled={currentUser.googleAccount}*/}
+            {/*        />*/}
+            {/*        <input*/}
+            {/*            defaultValue={currentUser.email}*/}
+            {/*            type="email"*/}
+            {/*            id="email"*/}
+            {/*            placeholder="Email"*/}
+            {/*            className="bg-slate-100 rounded-lg p-3"*/}
+            {/*            onChange={handleChange}*/}
+            {/*            disabled={currentUser.googleAccount}*/}
+            {/*        />*/}
+            {/*        {currentUser.googleAccount ? (*/}
+            {/*            ""*/}
+            {/*        ) : (*/}
+            {/*            <input*/}
+            {/*                type="password"*/}
+            {/*                id="password"*/}
+            {/*                placeholder="Password"*/}
+            {/*                value={passwordField}*/}
+            {/*                className="bg-slate-100 rounded-lg p-3"*/}
+            {/*                onChange={handleChange}*/}
+            {/*                disabled={currentUser.googleAccount}*/}
+            {/*            />*/}
+            {/*        )}*/}
+            {/*        <button*/}
+            {/*            className="bg-slate-700 text-white rounded-lg p-3 capitalize hover:opacity-95 disabled:opacity-80"*/}
+            {/*            disabled={currentUser.googleAccount}*/}
+            {/*        >*/}
+            {/*            {loading ? "Loading..." : "Update"}*/}
+            {/*        </button>*/}
+            {/*    </form>*/}
+            {/*    <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>*/}
+            {/*    <p className="text-green-700 mt-5">*/}
+            {/*        {updateSuccess && "User is updated successfully!"}*/}
+            {/*    </p>*/}
+            {/*</div>*/}
         </>
-        // <div className="p-3 max-w-lg mx-auto">
-        //   <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-        //   <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        //     {currentUser.googleAccount ? (
-        //       <div className="h-24 w-24 self-center mt-2">
-        //         {currentUser.profilePicture && (
-        //           <img
-        //             src={currentUser.profilePicture}
-        //             alt="profilePicture"
-        //             className="h-full w-full rounded-full object-cover"
-        //           />
-        //         )}
-        //       </div>
-        //     ) : (
-        //       <>
-        //         <input
-        //           type="file"
-        //           ref={fileRef}
-        //           hidden
-        //           accept="image/*"
-        //           onChange={(e) => setImage(e.target.files[0])}
-        //           disabled={currentUser.googleAccount}
-        //         />
-        //         <img
-        //           src={formData.profilePicture || currentUser.profilePicture}
-        //           alt="profilePicture"
-        //           className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2"
-        //           onClick={() => fileRef.current.click()}
-        //           disabled={currentUser.googleAccount}
-        //         />
-        //       </>
-        //     )}
-        //     <p className="text-sm self-center">
-        //       {imageError ? (
-        //         <span className="text-red-700">
-        //           Error uploading image (file size must be less than 5 MB)
-        //         </span>
-        //       ) : imagePercent > 0 && imagePercent < 100 ? (
-        //         <span className="text-slate-700">{`Uploading: ${imagePercent} %`}</span>
-        //       ) : imagePercent === 100 ? (
-        //         <span className="text-green-700">Image uploaded successfully</span>
-        //       ) : (
-        //         ""
-        //       )}
-        //     </p>
-        //     <input
-        //       defaultValue={currentUser.username}
-        //       type="text"
-        //       id="username"
-        //       placeholder="Username"
-        //       className="bg-slate-100 rounded-lg p-3"
-        //       onChange={handleChange}
-        //       disabled={currentUser.googleAccount}
-        //     />
-        //     <input
-        //       defaultValue={currentUser.email}
-        //       type="email"
-        //       id="email"
-        //       placeholder="Email"
-        //       className="bg-slate-100 rounded-lg p-3"
-        //       onChange={handleChange}
-        //       disabled={currentUser.googleAccount}
-        //     />
-        //     {currentUser.googleAccount ? (
-        //       ""
-        //     ) : (
-        //       <input
-        //         type="password"
-        //         id="password"
-        //         placeholder="Password"
-        //         value={passwordField}
-        //         className="bg-slate-100 rounded-lg p-3"
-        //         onChange={handleChange}
-        //         disabled={currentUser.googleAccount}
-        //       />
-        //     )}
-        //     <button
-        //       className="bg-slate-700 text-white rounded-lg p-3 capitalize hover:opacity-95 disabled:opacity-80"
-        //       disabled={currentUser.googleAccount}
-        //     >
-        //       {loading ? "Loading..." : "Update"}
-        //     </button>
-        //   </form>
-        //   <div className="flex justify-between mt-5">
-        //     <span
-        //       onClick={handleDeleteAccount}
-        //       className="text-red-700 cursor-pointer"
-        //     >
-        //       Delete Account
-        //     </span>
-        //     <span onClick={handleSignOut} className="text-red-700 cursor-pointer">
-        //       Loggout
-        //     </span>
-        //   </div>
-        //   <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>
-        //   <p className="text-green-700 mt-5">
-        //     {updateSuccess && "User is updated successfully!"}
-        //   </p>
-        // </div>
     );
 }
 
