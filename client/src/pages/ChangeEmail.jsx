@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import ChangeEmailModal from "../components/account/ChangeEmailModal.jsx";
 import ChangeEmailForm from "../components/account/ChangeEmailForm.jsx";
+import {useDispatch} from "react-redux";
+import {signOut} from "../redux/user/userSlice";
 
 const ChangeEmail = ({
                          currentUser,
@@ -13,6 +15,8 @@ const ChangeEmail = ({
                      }) => {
     const [showSuccessMessage, setShowSuccessMessage] = useState(updateSuccess);
     const [showModal, setShowModal] = useState(false);
+    const dispatch = useDispatch();
+
 
     useEffect(() => {
         setShowSuccessMessage(updateSuccess);
@@ -20,6 +24,7 @@ const ChangeEmail = ({
             const timer = setTimeout(() => {
                 setShowSuccessMessage(false);
                 closeModal();
+                dispatch(signOut());
             }, 5000);
 
             return () => clearTimeout(timer);
@@ -28,6 +33,7 @@ const ChangeEmail = ({
 
     const closeModal = () => {
         setShowModal(false);
+        dispatch(signOut());
     };
 
     return (
@@ -47,6 +53,11 @@ const ChangeEmail = ({
                 To complete the process of changing your email address, we will send a confirmation request to your new
                 address.
             </p>
+            {error && (
+                <p className="text-sm text-red-700 px-6 pt-3 pb-2 md:pb-0 md:pt-3 leading-6">
+                    {error.message}
+                </p>
+            )}
             <div className="flex justify-end">
                 <button
                     className="bg-slate-700 text-white rounded-lg py-3 px-6 capitalize shadow-md
