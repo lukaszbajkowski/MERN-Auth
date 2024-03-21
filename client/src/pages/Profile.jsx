@@ -6,6 +6,7 @@ import {
     deleteUserFailure,
     deleteUserStart,
     deleteUserSuccess,
+    signOut,
     updateUserFailure,
     updateUserStart,
     updateUserSuccess,
@@ -190,6 +191,15 @@ export default function Profile () {
         }
     };
 
+    const handleSignOut = async () => {
+        try {
+            await fetch('/api/auth/signout');
+            dispatch(signOut());
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const pathConfig = {
         '/profile': {
             content:
@@ -247,16 +257,16 @@ export default function Profile () {
         },
         '/change/email': {
             content:
-            <div className="row-span-3 md:col-span-12 p-4">
-                <ChangeEmail
-                    currentUser={currentUser}
-                    handleSubmit={handleSubmit}
-                    handleChange={handleChange}
-                    updateSuccess={updateSuccess}
-                    loading={loading}
-                    error={error}
-                />
-            </div>
+                <div className="row-span-3 md:col-span-12 p-4">
+                    <ChangeEmail
+                        currentUser={currentUser}
+                        handleSubmit={handleSubmit}
+                        handleChange={handleChange}
+                        updateSuccess={updateSuccess}
+                        loading={loading}
+                        error={error}
+                    />
+                </div>
             ,
         }
     };
