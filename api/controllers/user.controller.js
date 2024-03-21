@@ -28,37 +28,44 @@ const updateUserFields = async (req, res, next, updateFields) => {
 };
 
 export const updateUser = async (req, res, next) => {
-  if (req.user.id !== req.params.id) {
-    return next(errorHandler(401, "You can update only your account!"));
-  }
-
-  try {
-    const user = await User.findById(req.params.id);
-
-    if (user.googleAccount) {
-      return next(errorHandler(403, "Cannot update profile for Google account."));
+    if (req.user.id !== req.params.id) {
+        return next(errorHandler(401, "You can update only your account!"));
     }
 
-    if (req.body.password) {
-      req.body.password = bcryptjs.hashSync(req.body.password, 10);
+    try {
+        const user = await User.findById(req.params.id);
+
+        if (user.googleAccount) {
+            return next(errorHandler(403, "Cannot update profile for Google account."));
+        }
+
+        if (req.body.password) {
+            req.body.password = bcryptjs.hashSync(req.body.password, 10);
+        }
+
+        const updateFields = {
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password,
+            profilePicture: req.body.profilePicture,
+        };
+
+        if (req.body.email) {
+            updateFields.emailConfirmed = false;
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            {$set: updateFields},
+            {new: true}
+        );
+
+        const {password, ...rest} = updatedUser._doc;
+        1
+        res.status(200).json(rest);
+    } catch (error) {
+        next(error);
     }
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: {
-          username: req.body.username,
-          email: req.body.email,
-          password: req.body.password,
-          profilePicture: req.body.profilePicture,
-        },
-      },
-      { new: true }
-    );
-    const { password, ...rest } = updatedUser._doc;
-    res.status(200).json(rest);
-  } catch (error) {
-    next(error);
-  }
 };
 
 export const updateUserProfilePicture = async (req, res, next) => {
