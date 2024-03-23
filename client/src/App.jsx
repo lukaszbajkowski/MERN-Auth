@@ -22,11 +22,12 @@ export default function App () {
         {path: "/security-settings", element: <Profile/>},
         {path: "/personalization", element: <Personalization/>},
         {path: "/share", element: <Share/>},
-        {path: "/change/email", element: <Profile/>},
     ];
 
     const noGoogleAccountsRoutes = [
-        {path: "/account-settings/change/email", element: <Profile/>},
+        {path: "/change/login", element: <Profile/>},
+        {path: "/change/email", element: <Profile/>},
+
     ]
 
     return (

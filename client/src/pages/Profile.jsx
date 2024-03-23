@@ -16,6 +16,7 @@ import {useLocation} from "react-router-dom";
 import ProfileForm from "./ProfileSettings.jsx";
 import AccountForm from "./AccountSettings.jsx";
 import ChangeEmail from "./ChangeEmail.jsx";
+import ChangeLogin from "./ChangeLogin.jsx";
 
 export default function Profile () {
     const dispatch = useDispatch();
@@ -259,6 +260,20 @@ export default function Profile () {
             content:
                 <div className="row-span-3 md:col-span-12 p-4">
                     <ChangeEmail
+                        currentUser={currentUser}
+                        handleSubmit={handleSubmit}
+                        handleChange={handleChange}
+                        updateSuccess={updateSuccess}
+                        loading={loading}
+                        error={error}
+                    />
+                </div>
+            ,
+        },
+        '/change/login': {
+            content:
+                <div className="row-span-3 md:col-span-12 p-4">
+                    <ChangeLogin
                         currentUser={currentUser}
                         handleSubmit={handleSubmit}
                         handleChange={handleChange}
