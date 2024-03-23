@@ -2,6 +2,7 @@ import {Fragment} from 'react';
 import {Menu, Transition} from '@headlessui/react';
 import {signOut} from '../redux/user/userSlice';
 import {useDispatch} from 'react-redux';
+import PropTypes from "prop-types";
 
 function classNames (...classes) {
     return classes.filter(Boolean).join(' ');
@@ -30,7 +31,6 @@ export default function HeaderDropdown ({currentUser}) {
                     />
                 </Menu.Button>
             </div>
-
             <Transition
                 as={Fragment}
                 enter="transition ease-out duration-100"
@@ -79,3 +79,15 @@ function MenuItem ({href, onClick, children}) {
         </Menu.Item>
     );
 }
+
+HeaderDropdown.propTypes = {
+    currentUser: PropTypes.shape({
+        profilePicture: PropTypes.string.isRequired,
+    }).isRequired,
+};
+
+MenuItem.propTypes = {
+    href: PropTypes.string,
+    onClick: PropTypes.func,
+    children: PropTypes.node.isRequired,
+};
