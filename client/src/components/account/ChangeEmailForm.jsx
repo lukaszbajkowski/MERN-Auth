@@ -1,10 +1,6 @@
 import PropTypes from "prop-types";
 
-const ChangeEmailForm = ({
-                             currentUser,
-                             handleSubmit,
-                             handleChange,
-                         }) => {
+const ChangeEmailForm = ({currentUser, handleSubmit, handleChange}) => {
     return (
         <form
             onSubmit={(e) => {

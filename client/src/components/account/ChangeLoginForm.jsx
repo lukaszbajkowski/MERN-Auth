@@ -1,18 +1,11 @@
 import PropTypes from "prop-types";
-import {useState} from "react";
 
 const ChangeLoginForm = ({currentUser, handleSubmit, handleChange}) => {
-    const [newUsername, setNewUsername] = useState("");
-
-    const handleFormSubmit = (e) => {
-        e.preventDefault();
-        handleSubmit(e);
-        setNewUsername("");
-    };
-
     return (
         <form
-            onSubmit={handleFormSubmit}
+            onSubmit={(e) => {
+                handleSubmit(e);
+            }}
             className="grid grid-cols-12 gap-4"
         >
             <h1 className="col-start-1 col-end-7 text-black text-start my-auto">
@@ -33,11 +26,7 @@ const ChangeLoginForm = ({currentUser, handleSubmit, handleChange}) => {
                     placeholder="Username"
                     className="resize-none bg-slate-100 rounded-lg p-2.5 block w-full border border-gray-300
                     text-gray-900 text-sm block w-full"
-                    value={newUsername}
-                    onChange={(e) => {
-                        setNewUsername(e.target.value);
-                        handleChange(e);
-                    }}
+                    onChange={handleChange}
                 />
             </div>
         </form>

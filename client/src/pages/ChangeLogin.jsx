@@ -28,6 +28,7 @@ const ChangeLogin = ({
 
     const closeModal = () => {
         setShowModal(false);
+        window.location.href = '/account-settings';
     };
 
     return (
