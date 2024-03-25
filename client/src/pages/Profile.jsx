@@ -276,12 +276,12 @@ export default function Profile () {
             content:
                 <div className="row-span-3 md:col-span-12 p-4">
                     <ChangePassword
-                        currentUser={currentUser}
                         handleSubmit={handleSubmit}
                         handleChange={handleChange}
                         updateSuccess={updateSuccess}
                         loading={loading}
                         error={error}
+                        passwordField={passwordField}
                     />
                 </div>
             ,

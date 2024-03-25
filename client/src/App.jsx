@@ -27,7 +27,7 @@ export default function App () {
     const noGoogleAccountsRoutes = [
         {path: "/change/login", element: <Profile/>},
         {path: "/change/email", element: <Profile/>},
-
+        {path: "/change/password", element: <Profile/>},
     ]
 
     return (
