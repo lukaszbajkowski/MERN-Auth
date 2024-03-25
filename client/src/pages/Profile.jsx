@@ -16,6 +16,7 @@ import ProfileForm from "./ProfileSettings.jsx";
 import AccountForm from "./AccountSettings.jsx";
 import ChangeEmail from "./ChangeEmail.jsx";
 import ChangeLogin from "./ChangeLogin.jsx";
+import ChangePassword from "./ChangePassword.jsx";
 
 export default function Profile () {
     const dispatch = useDispatch();
@@ -227,9 +228,6 @@ export default function Profile () {
                     <div className="row-span-3 md:col-span-8 p-4">
                         <AccountForm
                             currentUser={currentUser}
-                            handleSubmit={handleSubmit}
-                            handleChange={handleChange}
-                            passwordField={passwordField}
                         />
                     </div>
                 </>,
@@ -264,6 +262,20 @@ export default function Profile () {
             content:
                 <div className="row-span-3 md:col-span-12 p-4">
                     <ChangeLogin
+                        currentUser={currentUser}
+                        handleSubmit={handleSubmit}
+                        handleChange={handleChange}
+                        updateSuccess={updateSuccess}
+                        loading={loading}
+                        error={error}
+                    />
+                </div>
+            ,
+        },
+        '/change/password': {
+            content:
+                <div className="row-span-3 md:col-span-12 p-4">
+                    <ChangePassword
                         currentUser={currentUser}
                         handleSubmit={handleSubmit}
                         handleChange={handleChange}
