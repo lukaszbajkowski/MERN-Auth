@@ -6,7 +6,6 @@ import {
     deleteUserFailure,
     deleteUserStart,
     deleteUserSuccess,
-    signOut,
     updateUserFailure,
     updateUserStart,
     updateUserSuccess,
@@ -189,15 +188,6 @@ export default function Profile () {
             dispatch(deleteUserSuccess(data));
         } catch (error) {
             dispatch(deleteUserFailure(error));
-        }
-    };
-
-    const handleSignOut = async () => {
-        try {
-            await fetch('/api/auth/signout');
-            dispatch(signOut());
-        } catch (error) {
-            console.error(error);
         }
     };
 

@@ -47,6 +47,7 @@ AccountForm.propTypes = {
     currentUser: PropTypes.object.isRequired,
     handleSubmit: PropTypes.func.isRequired,
     handleChange: PropTypes.func.isRequired,
+    passwordField: PropTypes.string.isRequired
 };
 
 export default AccountForm;
