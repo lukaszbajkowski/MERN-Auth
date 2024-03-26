@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 
-const ChangePasswordForm = ({ handleSubmit, handleChange, currentPasswordField, newPasswordField }) => {
+const ChangePasswordForm = ({handleSubmit, handleChange, currentPasswordField, newPasswordField}) => {
     return (
         <form
             onSubmit={(e) => {
@@ -9,7 +9,7 @@ const ChangePasswordForm = ({ handleSubmit, handleChange, currentPasswordField, 
             className="grid grid-cols-12 gap-4"
         >
             <h1 className="col-start-1 col-end-7 text-black text-start my-auto">
-                Change Password
+                Current Password
             </h1>
             <div className="md:col-start-7 col-start-1 col-end-13 flex flex-col my-auto">
                 <input
@@ -21,6 +21,11 @@ const ChangePasswordForm = ({ handleSubmit, handleChange, currentPasswordField, 
                             text-gray-900 text-sm block w-full"
                     onChange={handleChange}
                 />
+            </div>
+            <h1 className="col-start-1 col-end-7 text-black text-start my-auto">
+                New Password
+            </h1>
+            <div className="md:col-start-7 col-start-1 col-end-13 flex flex-col my-auto">
                 <input
                     type="password"
                     id="newPassword"

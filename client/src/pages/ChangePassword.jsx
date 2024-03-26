@@ -41,8 +41,6 @@ const ChangePassword = ({
                         setShowModal(true);
                     }}
                     handleChange={handleChange}
-                    loading={loading}
-                    // passwordField={passwordField}
                     currentPasswordField={currentPasswordField}
                     newPasswordField={newPasswordField}
                 />

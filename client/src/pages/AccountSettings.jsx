@@ -14,15 +14,14 @@ const AccountForm = ({currentUser}) => {
                 </div>
             </div>
             <div className="col-span-8 bg-white p-px"></div>
-            <div className="col-span-8 bg-slate-200 p-6 shadow-xl shadow-slate-200/50">
+            <div className="col-span-8 bg-slate-200 p-6 rounded-b-lg shadow-xl shadow-slate-200/50">
                 <div className="grid grid-cols-12 gap-4">
                     <EmailSection
                         currentUser={currentUser}
                     />
                 </div>
             </div>
-            <div className="col-span-8 bg-white p-px"></div>
-            <div className="col-span-8 bg-slate-200 p-6 rounded-b-lg shadow-xl shadow-slate-200/50">
+            <div className="col-span-8 bg-slate-200 p-6 mt-12 rounded-t-lg shadow-xl shadow-slate-200/50">
                 <div className="grid grid-cols-12 gap-4">
                     <PasswordSection
                         currentUser={currentUser}
