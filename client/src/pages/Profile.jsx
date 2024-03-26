@@ -17,6 +17,7 @@ import AccountForm from "./AccountSettings.jsx";
 import ChangeEmail from "./ChangeEmail.jsx";
 import ChangeLogin from "./ChangeLogin.jsx";
 import ChangePassword from "./ChangePassword.jsx";
+import DeleteAccount from "./DeleteAccount.jsx";
 
 export default function Profile () {
     const dispatch = useDispatch();
@@ -295,6 +296,21 @@ export default function Profile () {
                         error={error}
                         currentPasswordField={currentPasswordField}
                         newPasswordField={newPasswordField}
+                    />
+                </div>
+            ,
+        },
+        '/delete/account': {
+            content:
+                <div className="row-span-3 md:col-span-12 p-4">
+                    <DeleteAccount
+                        // currentUser={currentUser}
+                        // handleSubmit={handleSubmit}
+                        // handleChange={handleChange}
+                        // updateSuccess={updateSuccess}
+                        // loading={loading}
+                        // error={error}
+                        handleDeleteAccount={handleDeleteAccount}
                     />
                 </div>
             ,
