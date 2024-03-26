@@ -27,7 +27,8 @@ export default function Profile () {
     const [formData, setFormData] = useState({});
     const [updateSuccess, setUpdateSuccess] = useState(false);
     const {currentUser, loading, error} = useSelector((state) => state.user);
-    const [passwordField, setPasswordField] = useState("");
+    const [currentPasswordField, setCurrentPasswordField] = useState("");
+    const [newPasswordField, setNewPasswordField] = useState("");
     const [loadingImage, setLoadingImage] = useState(false);
     const [loadingProfileInfo, setLoadingProfileInfo] = useState(false);
     const location = useLocation();
@@ -55,7 +56,7 @@ export default function Profile () {
                 setImagePercent(Math.round(progress));
             },
 
-            (error) => {
+            () => {
                 setImageError(true);
                 setLoadingImage(false);
             },
@@ -70,12 +71,22 @@ export default function Profile () {
     };
 
     const handleChange = (e) => {
-        if (e.target.id === "password") {
-            setPasswordField(e.target.value);
+        const {id, value} = e.target;
+
+        switch (id) {
+            case "currentPassword":
+                setCurrentPasswordField(value);
+                break;
+            case "newPassword":
+                setNewPasswordField(value);
+                break;
+            default:
+                break;
         }
 
-        setFormData({...formData, [e.target.id]: e.target.value});
+        setFormData(prevState => ({...prevState, [id]: value}));
     };
+
 
     const handleShowCityChange = (checked) => {
         setShowCity(checked);
@@ -103,7 +114,8 @@ export default function Profile () {
 
             dispatch(updateUserSuccess(data));
             setUpdateSuccess(true);
-            setPasswordField("");
+            setCurrentPasswordField("");
+            setNewPasswordField("");
 
             setTimeout(() => {
                 setUpdateSuccess(false);
@@ -281,7 +293,8 @@ export default function Profile () {
                         updateSuccess={updateSuccess}
                         loading={loading}
                         error={error}
-                        passwordField={passwordField}
+                        currentPasswordField={currentPasswordField}
+                        newPasswordField={newPasswordField}
                     />
                 </div>
             ,
@@ -302,52 +315,6 @@ export default function Profile () {
             >
               Delete Account
             </span>
-            {/*<div className="p-3 max-w-lg mx-auto">*/}
-            {/*    <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>*/}
-            {/*    <form onSubmit={handleSubmit} className="flex flex-col gap-4">*/}
-            {/*        <input*/}
-            {/*            defaultValue={currentUser.username}*/}
-            {/*            type="text"*/}
-            {/*            id="username"*/}
-            {/*            placeholder="Username"*/}
-            {/*            className="bg-slate-100 rounded-lg p-3"*/}
-            {/*            onChange={handleChange}*/}
-            {/*            disabled={currentUser.googleAccount}*/}
-            {/*        />*/}
-            {/*        <input*/}
-            {/*            defaultValue={currentUser.email}*/}
-            {/*            type="email"*/}
-            {/*            id="email"*/}
-            {/*            placeholder="Email"*/}
-            {/*            className="bg-slate-100 rounded-lg p-3"*/}
-            {/*            onChange={handleChange}*/}
-            {/*            disabled={currentUser.googleAccount}*/}
-            {/*        />*/}
-            {/*        {currentUser.googleAccount ? (*/}
-            {/*            ""*/}
-            {/*        ) : (*/}
-            {/*            <input*/}
-            {/*                type="password"*/}
-            {/*                id="password"*/}
-            {/*                placeholder="Password"*/}
-            {/*                value={passwordField}*/}
-            {/*                className="bg-slate-100 rounded-lg p-3"*/}
-            {/*                onChange={handleChange}*/}
-            {/*                disabled={currentUser.googleAccount}*/}
-            {/*            />*/}
-            {/*        )}*/}
-            {/*        <button*/}
-            {/*            className="bg-slate-700 text-white rounded-lg p-3 capitalize hover:opacity-95 disabled:opacity-80"*/}
-            {/*            disabled={currentUser.googleAccount}*/}
-            {/*        >*/}
-            {/*            {loading ? "Loading..." : "Update"}*/}
-            {/*        </button>*/}
-            {/*    </form>*/}
-            {/*    <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>*/}
-            {/*    <p className="text-green-700 mt-5">*/}
-            {/*        {updateSuccess && "User is updated successfully!"}*/}
-            {/*    </p>*/}
-            {/*</div>*/}
         </>
     );
 }

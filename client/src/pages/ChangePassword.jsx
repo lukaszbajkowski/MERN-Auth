@@ -9,7 +9,8 @@ const ChangePassword = ({
                             updateSuccess,
                             loading,
                             error,
-                            passwordField
+                            currentPasswordField,
+                            newPasswordField
                         }) => {
     const [showSuccessMessage, setShowSuccessMessage] = useState(updateSuccess);
     const [showModal, setShowModal] = useState(false);
@@ -41,7 +42,9 @@ const ChangePassword = ({
                     }}
                     handleChange={handleChange}
                     loading={loading}
-                    passwordField={passwordField}
+                    // passwordField={passwordField}
+                    currentPasswordField={currentPasswordField}
+                    newPasswordField={newPasswordField}
                 />
             </div>
             {error && (
@@ -81,7 +84,8 @@ ChangePassword.propTypes = {
     updateSuccess: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     error: PropTypes.string,
-    passwordField: PropTypes.string.isRequired
+    currentPasswordField: PropTypes.string.isRequired,
+    newPasswordField: PropTypes.string.isRequired
 };
 
 export default ChangePassword;

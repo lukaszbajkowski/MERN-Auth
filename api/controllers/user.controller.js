@@ -42,37 +42,32 @@ const updateUserFields = async (req, res, next, updateFields) => {
 
 export const updateUser = async (req, res, next) => {
     try {
-        // Sprawdzenie czy użytkownik próbuje aktualizować tylko swoje konto
-        if (req.user.id !== req.params.id) {
-            return next(errorHandler(401, "You can update only your account!"));
-        }
-
-        // Pobranie użytkownika z bazy danych
         const user = await User.findById(req.params.id);
 
         if (!user) {
             return next(errorHandler(404, "User not found"));
         }
 
-        // Sprawdzenie czy konto jest kontem Google
+        const isPasswordValid = bcryptjs.compareSync(req.body.currentPassword, user.password);
+        if (!isPasswordValid) {
+            return next(errorHandler(401, "Current password is incorrect"));
+        }
+
         if (user.googleAccount) {
             return next(errorHandler(403, "Cannot update profile for Google account."));
         }
 
-        // Aktualizacja pola hasła jeśli zostało przesłane
-        if (req.body.password) {
-            req.body.password = bcryptjs.hashSync(req.body.password, 10);
+        if (req.body.newPassword) {
+            req.body.newPassword = bcryptjs.hashSync(req.body.newPassword, 10);
         }
 
-        // Aktualizacja pól użytkownika
         const updateFields = {
             username: req.body.username || user.username,
             email: req.body.email || user.email,
-            password: req.body.password || user.password,
+            password: req.body.newPassword || user.password,
             profilePicture: req.body.profilePicture || user.profilePicture,
         };
 
-        // Jeśli przesłano nowy email, zaktualizuj pole emailConfirmed
         if (req.body.email) {
             updateFields.emailConfirmed = false;
             const token = crypto.randomBytes(20).toString("hex");
@@ -87,19 +82,16 @@ export const updateUser = async (req, res, next) => {
                 html: `Click <a href="${confirmationLink}">here</a> ,to confirm your registration.`,
             };
 
-            // Wysyłanie maila z linkiem aktywacyjnym
             await transporter.sendMail(mailOptions);
         }
 
-        // Aktualizacja użytkownika w bazie danych
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id,
-            { $set: updateFields },
-            { new: true }
+            {$set: updateFields},
+            {new: true}
         );
 
-        // Usunięcie hasła z zwracanych danych użytkownika
-        const { password, ...rest } = updatedUser._doc;
+        const {password, ...rest} = updatedUser._doc;
         res.status(200).json(rest);
     } catch (error) {
         next(error);
