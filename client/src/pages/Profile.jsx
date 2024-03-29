@@ -17,6 +17,7 @@ import AccountForm from "./AccountSettings.jsx";
 import ChangeEmail from "./ChangeEmail.jsx";
 import ChangeLogin from "./ChangeLogin.jsx";
 import ChangePassword from "./ChangePassword.jsx";
+import DeleteAccount from "./DeleteAccount.jsx";
 
 export default function Profile () {
     const dispatch = useDispatch();
@@ -27,7 +28,8 @@ export default function Profile () {
     const [formData, setFormData] = useState({});
     const [updateSuccess, setUpdateSuccess] = useState(false);
     const {currentUser, loading, error} = useSelector((state) => state.user);
-    const [passwordField, setPasswordField] = useState("");
+    const [currentPasswordField, setCurrentPasswordField] = useState("");
+    const [newPasswordField, setNewPasswordField] = useState("");
     const [loadingImage, setLoadingImage] = useState(false);
     const [loadingProfileInfo, setLoadingProfileInfo] = useState(false);
     const location = useLocation();
@@ -70,12 +72,22 @@ export default function Profile () {
     };
 
     const handleChange = (e) => {
-        if (e.target.id === "password") {
-            setPasswordField(e.target.value);
+        const {id, value} = e.target;
+
+        switch (id) {
+            case "currentPassword":
+                setCurrentPasswordField(value);
+                break;
+            case "newPassword":
+                setNewPasswordField(value);
+                break;
+            default:
+                break;
         }
 
-        setFormData({...formData, [e.target.id]: e.target.value});
+        setFormData(prevState => ({...prevState, [id]: value}));
     };
+
 
     const handleShowCityChange = (checked) => {
         setShowCity(checked);
@@ -158,7 +170,8 @@ export default function Profile () {
 
             dispatch(updateUserSuccess(data));
             setUpdateSuccess(true);
-            setPasswordField("");
+            setCurrentPasswordField("");
+            setNewPasswordField("");
 
             setTimeout(() => {
                 setUpdateSuccess(false);
@@ -336,7 +349,23 @@ export default function Profile () {
                         updateSuccess={updateSuccess}
                         loading={loading}
                         error={error}
-                        passwordField={passwordField}
+                        currentPasswordField={currentPasswordField}
+                        newPasswordField={newPasswordField}
+                    />
+                </div>
+            ,
+        },
+        '/delete/account': {
+            content:
+                <div className="row-span-3 md:col-span-12 p-4">
+                    <DeleteAccount
+                        // currentUser={currentUser}
+                        // handleSubmit={handleSubmit}
+                        // handleChange={handleChange}
+                        // updateSuccess={updateSuccess}
+                        // loading={loading}
+                        // error={error}
+                        handleDeleteAccount={handleDeleteAccount}
                     />
                 </div>
             ,
