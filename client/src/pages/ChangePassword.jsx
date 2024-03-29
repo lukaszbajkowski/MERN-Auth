@@ -1,7 +1,7 @@
-import {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import ChangePasswordModal from "../components/account/ChangePasswordModal.jsx";
 import ChangePasswordForm from "../components/account/ChangePasswordForm.jsx";
+import displayModalWithoutLogout from "../components/account/displayModalWithoutLogout.jsx";
 
 const ChangePassword = ({
                             handleSubmit,
@@ -9,27 +9,15 @@ const ChangePassword = ({
                             updateSuccess,
                             loading,
                             error,
-                            passwordField
+                            passwordField,
+                            currentPasswordField
                         }) => {
-    const [showSuccessMessage, setShowSuccessMessage] = useState(updateSuccess);
-    const [showModal, setShowModal] = useState(false);
-
-    useEffect(() => {
-        setShowSuccessMessage(updateSuccess);
-        if (updateSuccess) {
-            const timer = setTimeout(() => {
-                setShowSuccessMessage(false);
-                closeModal();
-            }, 5000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [updateSuccess]);
-
-    const closeModal = () => {
-        setShowModal(false);
-        window.location.href = '/account-settings';
-    };
+    const {
+        showSuccessMessage,
+        showModal,
+        setShowModal,
+        closeModal
+    } = displayModalWithoutLogout(updateSuccess);
 
     return (
         <div className="p-3 max-w-2xl mx-auto">
@@ -42,6 +30,7 @@ const ChangePassword = ({
                     handleChange={handleChange}
                     loading={loading}
                     passwordField={passwordField}
+                    currentPasswordField={currentPasswordField}
                 />
             </div>
             {error && (
@@ -81,7 +70,8 @@ ChangePassword.propTypes = {
     updateSuccess: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired,
     error: PropTypes.string,
-    passwordField: PropTypes.string.isRequired
+    passwordField: PropTypes.string.isRequired,
+    currentPasswordField: PropTypes.string.isRequired
 };
 
 export default ChangePassword;

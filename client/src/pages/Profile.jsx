@@ -55,7 +55,7 @@ export default function Profile () {
                 setImagePercent(Math.round(progress));
             },
 
-            (error) => {
+            () => {
                 setImageError(true);
                 setLoadingImage(false);
             },
@@ -81,12 +81,67 @@ export default function Profile () {
         setShowCity(checked);
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const updateEmail = async () => {
         try {
-            dispatch(updateUserStart());
+            const res = await fetch(`/api/user/update/email/${currentUser._id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
 
-            const res = await fetch(`/api/user/update/${currentUser._id}`, {
+            const data = await res.json();
+
+            if (data.success === false) {
+                dispatch(updateUserFailure(data));
+                return;
+            }
+
+            dispatch(updateUserSuccess(data));
+            setUpdateSuccess(true);
+
+            setTimeout(() => {
+                setUpdateSuccess(false);
+            }, 5000);
+        } catch (error) {
+            dispatch(updateUserFailure(error));
+        }
+    };
+
+
+    const updateUsername = async () => {
+        try {
+            const res = await fetch(`/api/user/update/username/${currentUser._id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await res.json();
+
+            if (data.success === false) {
+                dispatch(updateUserFailure(data));
+                return;
+            }
+
+            dispatch(updateUserSuccess(data));
+            setUpdateSuccess(true);
+
+            setTimeout(() => {
+                setUpdateSuccess(false);
+            }, 5000);
+        } catch (error) {
+            dispatch(updateUserFailure(error));
+        }
+    };
+
+
+    const updatePassword = async () => {
+        try {
+            const res = await fetch(`/api/user/update/password/${currentUser._id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -249,7 +304,7 @@ export default function Profile () {
                 <div className="row-span-3 md:col-span-12 p-4">
                     <ChangeEmail
                         currentUser={currentUser}
-                        handleSubmit={handleSubmit}
+                        handleSubmit={updateEmail}
                         handleChange={handleChange}
                         updateSuccess={updateSuccess}
                         loading={loading}
@@ -263,7 +318,7 @@ export default function Profile () {
                 <div className="row-span-3 md:col-span-12 p-4">
                     <ChangeLogin
                         currentUser={currentUser}
-                        handleSubmit={handleSubmit}
+                        handleSubmit={updateUsername}
                         handleChange={handleChange}
                         updateSuccess={updateSuccess}
                         loading={loading}
@@ -276,7 +331,7 @@ export default function Profile () {
             content:
                 <div className="row-span-3 md:col-span-12 p-4">
                     <ChangePassword
-                        handleSubmit={handleSubmit}
+                        handleSubmit={updatePassword}
                         handleChange={handleChange}
                         updateSuccess={updateSuccess}
                         loading={loading}
@@ -302,52 +357,6 @@ export default function Profile () {
             >
               Delete Account
             </span>
-            {/*<div className="p-3 max-w-lg mx-auto">*/}
-            {/*    <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>*/}
-            {/*    <form onSubmit={handleSubmit} className="flex flex-col gap-4">*/}
-            {/*        <input*/}
-            {/*            defaultValue={currentUser.username}*/}
-            {/*            type="text"*/}
-            {/*            id="username"*/}
-            {/*            placeholder="Username"*/}
-            {/*            className="bg-slate-100 rounded-lg p-3"*/}
-            {/*            onChange={handleChange}*/}
-            {/*            disabled={currentUser.googleAccount}*/}
-            {/*        />*/}
-            {/*        <input*/}
-            {/*            defaultValue={currentUser.email}*/}
-            {/*            type="email"*/}
-            {/*            id="email"*/}
-            {/*            placeholder="Email"*/}
-            {/*            className="bg-slate-100 rounded-lg p-3"*/}
-            {/*            onChange={handleChange}*/}
-            {/*            disabled={currentUser.googleAccount}*/}
-            {/*        />*/}
-            {/*        {currentUser.googleAccount ? (*/}
-            {/*            ""*/}
-            {/*        ) : (*/}
-            {/*            <input*/}
-            {/*                type="password"*/}
-            {/*                id="password"*/}
-            {/*                placeholder="Password"*/}
-            {/*                value={passwordField}*/}
-            {/*                className="bg-slate-100 rounded-lg p-3"*/}
-            {/*                onChange={handleChange}*/}
-            {/*                disabled={currentUser.googleAccount}*/}
-            {/*            />*/}
-            {/*        )}*/}
-            {/*        <button*/}
-            {/*            className="bg-slate-700 text-white rounded-lg p-3 capitalize hover:opacity-95 disabled:opacity-80"*/}
-            {/*            disabled={currentUser.googleAccount}*/}
-            {/*        >*/}
-            {/*            {loading ? "Loading..." : "Update"}*/}
-            {/*        </button>*/}
-            {/*    </form>*/}
-            {/*    <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>*/}
-            {/*    <p className="text-green-700 mt-5">*/}
-            {/*        {updateSuccess && "User is updated successfully!"}*/}
-            {/*    </p>*/}
-            {/*</div>*/}
         </>
     );
 }

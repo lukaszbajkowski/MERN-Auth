@@ -40,72 +40,127 @@ const updateUserFields = async (req, res, next, updateFields) => {
     }
 };
 
-export const updateUser = async (req, res, next) => {
+export const updateEmail = async (req, res, next) => {
     try {
-        // Sprawdzenie czy użytkownik próbuje aktualizować tylko swoje konto
         if (req.user.id !== req.params.id) {
             return next(errorHandler(401, "You can update only your account!"));
         }
 
-        // Pobranie użytkownika z bazy danych
         const user = await User.findById(req.params.id);
 
         if (!user) {
             return next(errorHandler(404, "User not found"));
         }
 
-        // Sprawdzenie czy konto jest kontem Google
-        if (user.googleAccount) {
-            return next(errorHandler(403, "Cannot update profile for Google account."));
+        if (!req.body.email) {
+            return next(errorHandler(400, "Email is required."));
         }
 
-        // Aktualizacja pola hasła jeśli zostało przesłane
-        if (req.body.password) {
-            req.body.password = bcryptjs.hashSync(req.body.password, 10);
-        }
+        req.body.emailConfirmed = false;
+        const token = crypto.randomBytes(20).toString("hex");
+        req.body.emailConfirmedToken = token;
+        req.body.emailConfirmedExpires = Date.now() + 3600000;
 
-        // Aktualizacja pól użytkownika
-        const updateFields = {
-            username: req.body.username || user.username,
-            email: req.body.email || user.email,
-            password: req.body.password || user.password,
-            profilePicture: req.body.profilePicture || user.profilePicture,
+        const confirmationLink = `${process.env.APP_URL}/confirm-email/${token}`;
+        const mailOptions = {
+            from: process.env.GMAIL_USER,
+            to: req.body.email,
+            subject: "Confirmation of registration",
+            html: `Click <a href="${confirmationLink}">here</a> ,to confirm your registration.`,
         };
 
-        // Jeśli przesłano nowy email, zaktualizuj pole emailConfirmed
-        if (req.body.email) {
-            updateFields.emailConfirmed = false;
-            const token = crypto.randomBytes(20).toString("hex");
-            updateFields.emailConfirmedToken = token;
-            updateFields.emailConfirmedExpires = Date.now() + 3600000;
+        await transporter.sendMail(mailOptions);
 
-            const confirmationLink = `${process.env.APP_URL}/confirm-email/${token}`;
-            const mailOptions = {
-                from: process.env.GMAIL_USER,
-                to: req.body.email,
-                subject: "Confirmation of registration",
-                html: `Click <a href="${confirmationLink}">here</a> ,to confirm your registration.`,
-            };
-
-            // Wysyłanie maila z linkiem aktywacyjnym
-            await transporter.sendMail(mailOptions);
-        }
-
-        // Aktualizacja użytkownika w bazie danych
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id,
-            { $set: updateFields },
-            { new: true }
+            {
+                $set: {
+                    email: req.body.email,
+                    emailConfirmed: false,
+                    emailConfirmedToken: token,
+                    emailConfirmedExpires: req.body.emailConfirmedExpires
+                }
+            },
+            {new: true}
         );
 
-        // Usunięcie hasła z zwracanych danych użytkownika
-        const { password, ...rest } = updatedUser._doc;
+        const {password, ...rest} = updatedUser._doc;
         res.status(200).json(rest);
     } catch (error) {
         next(error);
     }
 };
 
+
+export const updateUsername = async (req, res, next) => {
+    try {
+        if (req.user.id !== req.params.id) {
+            return next(errorHandler(401, "You can update only your account!"));
+        }
+
+        const user = await User.findById(req.params.id);
+
+        if (!user) {
+            return next(errorHandler(404, "User not found"));
+        }
+
+        if (!req.body.username) {
+            return next(errorHandler(400, "Username is required."));
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            {$set: {username: req.body.username}},
+            {new: true}
+        );
+
+        const {password, ...rest} = updatedUser._doc;
+        res.status(200).json(rest);
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const updatePassword = async (req, res, next) => {
+    try {
+        if (req.user.id !== req.params.id) {
+            return next(errorHandler(401, "You can update only your account!"));
+        }
+
+        const user = await User.findById(req.params.id);
+
+        if (!user) {
+            return next(errorHandler(404, "User not found"));
+        }
+
+        if (!req.body.currentPassword) {
+            return next(errorHandler(400, "Current password is required."));
+        }
+
+        const passwordMatch = await bcryptjs.compare(req.body.currentPassword, user.password);
+        if (!passwordMatch) {
+            return next(errorHandler(400, "Invalid current password."));
+        }
+
+        if (!req.body.password) {
+            return next(errorHandler(400, "New password is required."));
+        }
+
+        const hashedPassword = bcryptjs.hashSync(req.body.password, 10);
+
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            {$set: {password: hashedPassword}},
+            {new: true}
+        );
+
+        const {password, ...rest} = updatedUser._doc;
+        res.status(200).json(rest);
+    } catch (error) {
+        next(error);
+    }
+};
 
 export const updateUserProfilePicture = async (req, res, next) => {
     const updateFields = {

@@ -1,7 +1,7 @@
-import {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import ChangeLoginForm from "../components/account/ChangeLoginForm.jsx";
 import ChangeLoginModal from "../components/account/ChangeLoginModal.jsx";
+import displayModalWithoutLogout from "../components/account/displayModalWithoutLogout.jsx";
 
 const ChangeLogin = ({
                          currentUser,
@@ -11,25 +11,12 @@ const ChangeLogin = ({
                          loading,
                          error,
                      }) => {
-    const [showSuccessMessage, setShowSuccessMessage] = useState(updateSuccess);
-    const [showModal, setShowModal] = useState(false);
-
-    useEffect(() => {
-        setShowSuccessMessage(updateSuccess);
-        if (updateSuccess) {
-            const timer = setTimeout(() => {
-                setShowSuccessMessage(false);
-                closeModal();
-            }, 5000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [updateSuccess]);
-
-    const closeModal = () => {
-        setShowModal(false);
-        window.location.href = '/account-settings';
-    };
+    const {
+        showSuccessMessage,
+        showModal,
+        setShowModal,
+        closeModal
+    } = displayModalWithoutLogout(updateSuccess);
 
     return (
         <div className="p-3 max-w-2xl mx-auto">
