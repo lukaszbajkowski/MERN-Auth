@@ -121,7 +121,6 @@ export default function Profile () {
         }
     };
 
-
     const updateUsername = async () => {
         try {
             const res = await fetch(`/api/user/update/username/${currentUser._id}`, {
@@ -254,7 +253,11 @@ export default function Profile () {
                 dispatch(deleteUserFailure(data));
                 return;
             }
-            dispatch(deleteUserSuccess(data));
+
+            setTimeout(() => {
+                dispatch(deleteUserSuccess(data));
+                deleteUserSuccess(false);
+            }, 5000);
         } catch (error) {
             dispatch(deleteUserFailure(error));
         }
@@ -359,13 +362,10 @@ export default function Profile () {
             content:
                 <div className="row-span-3 md:col-span-12 p-4">
                     <DeleteAccount
-                        // currentUser={currentUser}
-                        // handleSubmit={handleSubmit}
-                        // handleChange={handleChange}
-                        // updateSuccess={updateSuccess}
-                        // loading={loading}
-                        // error={error}
+                        currentUser={currentUser}
                         handleDeleteAccount={handleDeleteAccount}
+                        loading={loading}
+                        error={error}
                     />
                 </div>
             ,

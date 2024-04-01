@@ -192,3 +192,27 @@ export const deleteUser = async (req, res, next) => {
         next(error);
     }
 };
+
+export const deleteUserMessage = async (req, res) => {
+    try {
+        const { recipientEmail, senderEmail, subject, content } = req.body;
+
+        if (!recipientEmail || !senderEmail || !subject || !content) {
+            return res.status(400).json({ success: false, message: 'Missing required data.' });
+        }
+
+        const mailOptions = {
+            from: senderEmail,
+            to: recipientEmail,
+            subject: subject,
+            text: content
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        res.status(200).json({ success: true, message: 'Email sent successfully.' });
+    } catch (error) {
+        console.error('Error sending email:', error);
+        res.status(500).json({ success: false, message: 'Failed to send email.' });
+    }
+};

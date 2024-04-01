@@ -1,6 +1,7 @@
 import express from "express";
 import {
     deleteUser,
+    deleteUserMessage,
     updateEmail,
     updatePassword,
     updateUserAbout,
@@ -17,5 +18,6 @@ router.post("/update/username/:id", verifyToken, updateUsername);
 router.post("/update/image/:id", verifyToken, updateUserProfilePicture);
 router.post("/update/about/:id", verifyToken, updateUserAbout);
 router.delete("/delete/:id", verifyToken, deleteUser);
+router.post("/delete/email", verifyToken, deleteUserMessage);
 
 export default router;
