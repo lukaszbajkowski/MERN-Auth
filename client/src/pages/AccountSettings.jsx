@@ -3,8 +3,9 @@ import EmailSection from "../components/account/EmailSection.jsx";
 import LoginSection from "../components/account/LoginSection.jsx";
 import PasswordSection from "../components/account/PasswordSection.jsx";
 import DeleteAccountSection from "../components/account/DeleteAccountSection.jsx";
+import RealNameInput from "../components/account/RealNameInput.jsx";
 
-const AccountForm = ({currentUser}) => {
+const AccountForm = ({currentUser, handleChange, handleSubmitUser, loadingProfileInfo}) => {
     return (
         <>
             <div className="col-span-8 bg-slate-200 p-6 rounded-t-lg shadow-xl shadow-slate-200/50">
@@ -31,15 +32,40 @@ const AccountForm = ({currentUser}) => {
                     </div>
                 </div>
             )}
+                        <form onSubmit={handleSubmitUser}>
+
+            <div className="col-span-8 bg-slate-200 p-6 mt-12 rounded-lg shadow-xl shadow-slate-200/50 ">
+                <div className="grid grid-cols-12 gap-4">
+                    <RealNameInput
+                        name={currentUser.name}
+                        handleChange={handleChange}
+                    />
+                </div>
+            </div>
             <DeleteAccountSection
                 currentUser={currentUser}
             />
+            <div className="flex justify-end">
+                <button
+                    className="bg-slate-700 text-white rounded-lg py-3 px-6 capitalize shadow-md shadow-slate-700-50
+                    transition duration-300 ease-in-out hover:transition hover:duration-300 hover:ease-in-out
+                    hover:opacity-95 disabled:opacity-80 me-6 mt-6"
+                    disabled={loadingProfileInfo}
+                    onClick={handleSubmitUser}
+                >
+                    {loadingProfileInfo ? 'Loading...' : 'Update'}
+                </button>
+            </div>
+                        </form>
         </>
     );
 };
 
 AccountForm.propTypes = {
     currentUser: PropTypes.object.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    loadingProfileInfo: PropTypes.bool.isRequired,
+    handleSubmitUser: PropTypes.func.isRequired,
 };
 
 export default AccountForm;

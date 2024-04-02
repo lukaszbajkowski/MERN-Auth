@@ -299,6 +299,9 @@ export default function Profile () {
                     <div className="row-span-3 md:col-span-8 p-4">
                         <AccountForm
                             currentUser={currentUser}
+                            handleChange={handleChange}
+                            handleSubmitUser={handleSubmitUser}
+                            loadingProfileInfo={loadingProfileInfo}
                         />
                     </div>
                 </>,
@@ -376,17 +379,9 @@ export default function Profile () {
     const currentPathConfig = pathConfig[currentPath] || pathConfig['/default'];
 
     return (
-        <>
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 m-4">
-                {currentPathConfig.content}
-            </div>
-            <span
-                onClick={handleDeleteAccount}
-                className="text-red-700 cursor-pointer"
-            >
-              Delete Account
-            </span>
-        </>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 m-4">
+            {currentPathConfig.content}
+        </div>
     );
 }
 
