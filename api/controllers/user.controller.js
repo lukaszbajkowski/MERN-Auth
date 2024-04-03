@@ -178,6 +178,7 @@ export const updateUserAbout = async (req, res, next) => {
         country: req.body.country,
         showCity: req.body.showCity,
         gender: req.body.gender,
+        birthDate: req.body.birthDate,
     };
 
     await updateUserFields(req, res, next, updateFields);

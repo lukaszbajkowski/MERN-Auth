@@ -63,6 +63,9 @@ const userSchema = new mongoose.Schema(
         },
         gender: {
             type: String,
+        },
+        birthDate: {
+            type: Date,
         }
     },
     {timestamps: true}
