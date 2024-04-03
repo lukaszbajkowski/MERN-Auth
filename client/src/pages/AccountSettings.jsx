@@ -10,7 +10,7 @@ import DatePickerComponent from "../components/account/BDayPicker";
 
 const AccountForm = ({currentUser, handleChange, handleSubmitUser, loadingProfileInfo}) => {
     const [selectedGender, setSelectedGender] = useState(currentUser.gender || "");
-    const [birthdate, setBirthdate] = useState(currentUser.birthDate || new Date());
+    const [birthdate, setBirthdate] = useState(currentUser.birthDate);
 
     const handleGenderChange = (e) => {
         setSelectedGender(e.target.value);
