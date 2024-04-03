@@ -61,6 +61,9 @@ const userSchema = new mongoose.Schema(
             ref: "Country",
             default: '65f1be220bfe769bf6cd0203'
         },
+        gender: {
+            type: String,
+        }
     },
     {timestamps: true}
 );

@@ -13,7 +13,7 @@ const CountrySelect = ({countries, selectedCountry, handleCountryChange}) => {
                     onChange={handleCountryChange}
                     value={selectedCountry}
                     className="appearance-none bg-slate-100 rounded-lg border border-gray-300 text-gray-900 text-sm
-                    block w-full p-2.5"
+                    block w-full p-2.5 cursor-pointer"
                 >
                     {countries.map(country => (
                         <option key={country._id} value={country._id}>

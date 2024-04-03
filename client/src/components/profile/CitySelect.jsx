@@ -12,7 +12,8 @@ const CitySelect = ({cities, selectedCity, handleCityChange, currentUserCity}) =
                     name="city"
                     onChange={handleCityChange}
                     value={selectedCity}
-                    className="appearance-none bg-slate-100 rounded-lg border border-gray-300 text-gray-900 text-sm block w-full p-2.5"
+                    className="appearance-none bg-slate-100 rounded-lg border border-gray-300 text-gray-900 text-sm
+                    block w-full p-2.5 cursor-pointer"
                 >
                     {currentUserCity ? (
                         <></>
