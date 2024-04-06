@@ -1,11 +1,11 @@
 import Switch from "react-switch";
 import PropTypes from "prop-types";
 
-const VacationSwitch = ({checked, onChange}) => {
+const SettingSwitch = ({label, checked, onChange}) => {
     return (
         <>
             <h1 className="col-start-1 col-end-7 text-black text-start my-auto">
-                Vacation mode
+                {label}
             </h1>
             <div className="md:col-start-7 col-start-1 col-end-13 flex flex-col my-auto">
                 <div className="md:col-start-7 col-start-1 col-end-13 flex flex-col ms-auto my-auto">
@@ -25,10 +25,10 @@ const VacationSwitch = ({checked, onChange}) => {
     );
 };
 
-
-VacationSwitch.propTypes = {
+SettingSwitch.propTypes = {
+    label: PropTypes.string.isRequired,
     checked: PropTypes.bool.isRequired,
     onChange: PropTypes.func.isRequired,
 };
 
-export default VacationSwitch;
+export default SettingSwitch;

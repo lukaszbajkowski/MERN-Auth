@@ -7,7 +7,7 @@ import DeleteAccountSection from "../components/account/DeleteAccountSection.jsx
 import RealNameInput from "../components/account/RealNameInput.jsx";
 import GenderSelect from "../components/account/GenderSelect.jsx";
 import DatePickerComponent from "../components/account/BDayPicker";
-import VacationSwitch from "../components/account/VacationSwitch";
+import SettingSwitch from "../components/elements/SettingSwitch.jsx";
 
 const AccountForm = ({
                          currentUser,
@@ -79,9 +79,11 @@ const AccountForm = ({
                 </div>
                 <div className="col-span-8 bg-slate-200 p-6 mt-12 rounded-lg shadow-xl shadow-slate-200/50">
                     <div className="grid grid-cols-12 gap-4">
-                        <VacationSwitch
+
+                        <SettingSwitch
+                            onChange={`Vacation mode`}
                             checked={vacation}
-                            onChange={handleVacationChange}
+                            label={handleVacationChange}
                         />
                     </div>
                 </div>

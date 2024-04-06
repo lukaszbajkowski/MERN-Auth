@@ -2,7 +2,7 @@ import AboutUserTextarea from './AboutUserTextarea';
 import CountrySelect from './CountrySelect';
 import CitySelect from './CitySelect';
 import PropTypes from 'prop-types';
-import ShowCitySwitch from "./ShowCitySwitch.jsx";
+import SettingSwitch from "../elements/SettingSwitch.jsx";
 
 const UserForm = ({
                       currentUser,
@@ -51,7 +51,8 @@ const UserForm = ({
             <div className="col-span-8 bg-white p-px"></div>
             <div className="col-span-8 bg-slate-200 p-6 shadow-xl shadow-slate-200/50">
                 <div className="grid grid-cols-12 gap-4">
-                    <ShowCitySwitch
+                    <SettingSwitch
+                        label={`Show city in profile`}
                         checked={showCity}
                         onChange={handleShowCityChange}
                     />
