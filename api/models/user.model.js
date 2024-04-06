@@ -53,8 +53,8 @@ const userSchema = new mongoose.Schema(
             default: '65f1be260bfe769bf6cd020a'
         },
         showCity: {
-          type: Boolean,
-          default: true,
+            type: Boolean,
+            default: true,
         },
         country: {
             type: mongoose.Schema.Types.ObjectId,
@@ -66,6 +66,10 @@ const userSchema = new mongoose.Schema(
         },
         birthDate: {
             type: Date,
+        },
+        vacation: {
+            type: Boolean,
+            default: false,
         }
     },
     {timestamps: true}

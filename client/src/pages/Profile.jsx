@@ -34,6 +34,8 @@ export default function Profile () {
     const [loadingProfileInfo, setLoadingProfileInfo] = useState(false);
     const location = useLocation();
     const [showCity, setShowCity] = useState(currentUser.showCity);
+    const [vacation, setVacation] = useState(currentUser.vacation);
+
 
     useEffect(() => {
         if (image) {
@@ -91,6 +93,10 @@ export default function Profile () {
 
     const handleShowCityChange = (checked) => {
         setShowCity(checked);
+    };
+
+    const handleVacationChange = (checked) => {
+        setVacation(checked);
     };
 
     const updateEmail = async () => {
@@ -191,7 +197,7 @@ export default function Profile () {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({...formData, showCity}),
+                body: JSON.stringify({...formData, showCity, vacation}),
             });
 
             const data = await res.json();
@@ -302,6 +308,8 @@ export default function Profile () {
                             handleChange={handleChange}
                             handleSubmitUser={handleSubmitUser}
                             loadingProfileInfo={loadingProfileInfo}
+                            vacation={vacation}
+                            handleVacationChange={handleVacationChange}
                         />
                     </div>
                 </>,

@@ -7,8 +7,16 @@ import DeleteAccountSection from "../components/account/DeleteAccountSection.jsx
 import RealNameInput from "../components/account/RealNameInput.jsx";
 import GenderSelect from "../components/account/GenderSelect.jsx";
 import DatePickerComponent from "../components/account/BDayPicker";
+import VacationSwitch from "../components/account/VacationSwitch";
 
-const AccountForm = ({currentUser, handleChange, handleSubmitUser, loadingProfileInfo}) => {
+const AccountForm = ({
+                         currentUser,
+                         handleChange,
+                         handleSubmitUser,
+                         loadingProfileInfo,
+                         vacation,
+                         handleVacationChange,
+                     }) => {
     const [selectedGender, setSelectedGender] = useState(currentUser.gender || "");
     const [birthdate, setBirthdate] = useState(currentUser.birthDate);
 
@@ -69,6 +77,14 @@ const AccountForm = ({currentUser, handleChange, handleSubmitUser, loadingProfil
                         />
                     </div>
                 </div>
+                <div className="col-span-8 bg-slate-200 p-6 mt-12 rounded-lg shadow-xl shadow-slate-200/50">
+                    <div className="grid grid-cols-12 gap-4">
+                        <VacationSwitch
+                            checked={vacation}
+                            onChange={handleVacationChange}
+                        />
+                    </div>
+                </div>
                 <DeleteAccountSection currentUser={currentUser}/>
                 <div className="flex justify-end">
                     <button
@@ -91,6 +107,8 @@ AccountForm.propTypes = {
     handleChange: PropTypes.func.isRequired,
     loadingProfileInfo: PropTypes.bool.isRequired,
     handleSubmitUser: PropTypes.func.isRequired,
+    vacation: PropTypes.bool.isRequired,
+    handleVacationChange: PropTypes.func.isRequired,
 };
 
 export default AccountForm;
