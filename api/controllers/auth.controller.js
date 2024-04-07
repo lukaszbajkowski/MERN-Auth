@@ -127,23 +127,28 @@ export const signin = async (req, res, next) => {
 
 export const google = async (req, res, next) => {
     try {
-        const user = await User.findOne({email: req.body.email});
+        const checkemail = await User.findOne({email: req.body.email});
+        const user = await User.findOne({relatedAccount: req.body.email});
+
+        if (checkemail && !checkemail.googleAccount) {
+            res.status(200).json(user);
+        }
 
         if (user) {
-            if (!user.googleAccount) {
+            if (!user.googleAccount || user.relatedAccount !== "") {
                 res.status(200).json(user);
             } else {
-            const token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
-            const {password: userPassword, ...userData} = user._doc;
-            const expiryDate = new Date(Date.now() + 3600000);
+                const token = jwt.sign({id: user._id}, process.env.JWT_SECRET);
+                const {password: userPassword, ...userData} = user._doc;
+                const expiryDate = new Date(Date.now() + 3600000);
 
-            res
-                .cookie("access_token", token, {
-                    httpOnly: true,
-                    expiryDate: expiryDate,
-                })
-                .status(200)
-                .json(userData);
+                res
+                    .cookie("access_token", token, {
+                        httpOnly: true,
+                        expiryDate: expiryDate,
+                    })
+                    .status(200)
+                    .json(userData);
             }
         } else {
             const generatedPassword =
@@ -159,6 +164,7 @@ export const google = async (req, res, next) => {
                 profilePicture: req.body.photo,
                 emailConfirmed: true,
                 googleAccount: true,
+                relatedAccount: req.body.email
             });
 
             await newUser.save();

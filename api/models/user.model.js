@@ -47,6 +47,10 @@ const userSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        relatedAccount: {
+            type: String,
+            unique: true,
+        },
         city: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "City",

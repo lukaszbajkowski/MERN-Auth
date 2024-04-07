@@ -29,8 +29,9 @@ export default function OAuth () {
             const data = await res.json();
 
             if (!data.googleAccount) {
-                setMessage("Email already exists")
-                return;
+                if (data.relatedAccount !== "") {
+                    dispatch(loginSuccess(data));
+                }
             }
 
             dispatch(loginSuccess(data));
@@ -51,7 +52,7 @@ export default function OAuth () {
             </button>
             {message && (
                 <p className="text-red-700 mt-5">
-                    {message || "Something went wrong!"}
+                    {message}
                 </p>
             )}
         </>

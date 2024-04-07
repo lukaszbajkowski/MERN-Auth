@@ -79,11 +79,10 @@ const AccountForm = ({
                 </div>
                 <div className="col-span-8 bg-slate-200 p-6 mt-12 rounded-lg shadow-xl shadow-slate-200/50">
                     <div className="grid grid-cols-12 gap-4">
-
                         <SettingSwitch
-                            onChange={`Vacation mode`}
+                            label={`Vacation mode`}
                             checked={vacation}
-                            label={handleVacationChange}
+                            onChange={handleVacationChange}
                         />
                     </div>
                 </div>
