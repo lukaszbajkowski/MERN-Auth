@@ -18,6 +18,7 @@ import ChangeEmail from "./ChangeEmail.jsx";
 import ChangeLogin from "./ChangeLogin.jsx";
 import ChangePassword from "./ChangePassword.jsx";
 import DeleteAccount from "./DeleteAccount.jsx";
+import {getAuth, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
 
 export default function Profile () {
     const dispatch = useDispatch();
@@ -32,6 +33,7 @@ export default function Profile () {
     const [newPasswordField, setNewPasswordField] = useState("");
     const [loadingImage, setLoadingImage] = useState(false);
     const [loadingProfileInfo, setLoadingProfileInfo] = useState(false);
+    const [loadingRelatedAccount, setLoadingRelatedAccount] = useState(false);
     const location = useLocation();
     const [showCity, setShowCity] = useState(currentUser.showCity);
     const [vacation, setVacation] = useState(currentUser.vacation);
@@ -269,6 +271,64 @@ export default function Profile () {
         }
     };
 
+    const relatedAccount = async () => {
+        setLoadingRelatedAccount(true);
+        dispatch(updateUserStart());
+        try {
+            const res = await fetch("/api/auth/check-related-account", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: currentUser.email,
+                }),
+            });
+
+            const data = await res.json();
+
+            if (data.hasRelatedAccount) {
+                await fetch("/api/auth/remove-related-account", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email: currentUser.email,
+                    }),
+                });
+                dispatch(updateUserSuccess({...currentUser, relatedAccount: ""}));
+            } else {
+                try {
+                    const provider = new GoogleAuthProvider();
+                    const auth = getAuth(app);
+
+                    const result = await signInWithPopup(auth, provider);
+                    await fetch("/api/auth/related-account", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            name: currentUser.email,
+                            email: result.user.email,
+                        }),
+                    });
+                    dispatch(updateUserSuccess({...currentUser, relatedAccount: result.user.email}));
+                } catch (error) {
+                    dispatch(updateUserFailure(error));
+                    setLoadingRelatedAccount(false);
+                }
+            }
+        } catch (error) {
+            dispatch(updateUserFailure(error));
+            setLoadingRelatedAccount(false);
+        } finally {
+            dispatch(updateUserFailure());
+            setLoadingRelatedAccount(false);
+        }
+    };
+
     const pathConfig = {
         '/profile': {
             content:
@@ -387,9 +447,18 @@ export default function Profile () {
     const currentPathConfig = pathConfig[currentPath] || pathConfig['/default'];
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 m-4">
-            {currentPathConfig.content}
-        </div>
+        <>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 m-4">
+                {currentPathConfig.content}
+            </div>
+            <button
+                type="button"
+                onClick={relatedAccount}
+                className={`bg-red-700 text-white rounded-lg p-3 capitalize hover:opacity-90 ${loadingRelatedAccount ? 'opacity-50 pointer-events-none' : ''}`}
+            >
+                {loadingRelatedAccount ? 'Ładowanie...' : currentUser.relatedAccount ? 'Rozłącz konto' : 'Połącz konto'}
+            </button>
+        </>
     );
 }
 

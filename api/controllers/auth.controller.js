@@ -186,6 +186,54 @@ export const google = async (req, res, next) => {
     }
 };
 
+export const relatedAccount = async (req, res, next) => {
+    try {
+        const checkemail = await User.findOne({email: req.body.name});
+
+        if (checkemail && !checkemail.googleAccount) {
+            checkemail.relatedAccount = req.body.email;
+            await checkemail.save();
+        }
+
+        res.status(200).json({success: true});
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const checkHasRelatedAccount = async (req, res) => {
+    try {
+        const user = await User.findOne({email: req.body.email});
+        if (user && user.relatedAccount) {
+            res.json({hasRelatedAccount: true});
+        } else {
+            res.json({hasRelatedAccount: false});
+        }
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+};
+
+export const deleteRelatedAccount = async (req, res) => {
+    try {
+        const user = await User.findOne({email: req.body.email});
+        if (user) {
+            if (!user.googleAccount) {
+                user.relatedAccount = "";
+                await user.save();
+                res.json({message: 'Powiązane konto zostało usunięte.'});
+            } else {
+                res.status(404).json({message: 'Użytkownik stworzony przy pomocy konta google.'});
+            }
+        } else {
+            res.status(404).json({message: 'Użytkownik nie został znaleziony.'});
+        }
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+};
+
+
 export const signout = async (req, res) => {
     res.clearCookie("access_token").status(200).json({message: "Logged out"});
 };
