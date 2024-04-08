@@ -370,6 +370,8 @@ export default function Profile () {
                             loadingProfileInfo={loadingProfileInfo}
                             vacation={vacation}
                             handleVacationChange={handleVacationChange}
+                            relatedAccount={relatedAccount}
+                            loadingRelatedAccount={loadingRelatedAccount}
                         />
                     </div>
                 </>,
@@ -447,18 +449,9 @@ export default function Profile () {
     const currentPathConfig = pathConfig[currentPath] || pathConfig['/default'];
 
     return (
-        <>
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 m-4">
-                {currentPathConfig.content}
-            </div>
-            <button
-                type="button"
-                onClick={relatedAccount}
-                className={`bg-red-700 text-white rounded-lg p-3 capitalize hover:opacity-90 ${loadingRelatedAccount ? 'opacity-50 pointer-events-none' : ''}`}
-            >
-                {loadingRelatedAccount ? 'Ładowanie...' : currentUser.relatedAccount ? 'Rozłącz konto' : 'Połącz konto'}
-            </button>
-        </>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 m-4">
+            {currentPathConfig.content}
+        </div>
     );
 }
 

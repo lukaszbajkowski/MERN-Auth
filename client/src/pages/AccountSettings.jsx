@@ -8,6 +8,7 @@ import RealNameInput from "../components/account/RealNameInput.jsx";
 import GenderSelect from "../components/account/GenderSelect.jsx";
 import DatePickerComponent from "../components/account/BDayPicker";
 import SettingSwitch from "../components/elements/SettingSwitch.jsx";
+import RelatedAccount from "../components/account/RelatedAccoutButton";
 
 const AccountForm = ({
                          currentUser,
@@ -16,6 +17,8 @@ const AccountForm = ({
                          loadingProfileInfo,
                          vacation,
                          handleVacationChange,
+                         relatedAccount,
+                         loadingRelatedAccount
                      }) => {
     const [selectedGender, setSelectedGender] = useState(currentUser.gender || "");
     const [birthdate, setBirthdate] = useState(currentUser.birthDate);
@@ -43,13 +46,6 @@ const AccountForm = ({
                     <EmailSection currentUser={currentUser}/>
                 </div>
             </div>
-            {!currentUser.googleAccount && (
-                <div className="col-span-8 bg-slate-200 p-6 mt-12 rounded-lg shadow-xl shadow-slate-200/50">
-                    <div className="grid grid-cols-12 gap-4">
-                        <PasswordSection currentUser={currentUser}/>
-                    </div>
-                </div>
-            )}
             <form onSubmit={handleSubmitUser}>
                 <div className="col-span-8 bg-slate-200 p-6 mt-12 rounded-t-lg shadow-xl shadow-slate-200/50 ">
                     <div className="grid grid-cols-12 gap-4">
@@ -86,6 +82,22 @@ const AccountForm = ({
                         />
                     </div>
                 </div>
+                <div className="col-span-8 bg-slate-200 p-6 mt-12 rounded-lg shadow-xl shadow-slate-200/50">
+                    <div className="grid grid-cols-12 gap-4">
+                        <RelatedAccount
+                            relatedAccount={relatedAccount}
+                            loadingRelatedAccount={loadingRelatedAccount}
+                            currentUser={currentUser}
+                        />
+                    </div>
+                </div>
+                {!currentUser.googleAccount && (
+                    <div className="col-span-8 bg-slate-200 p-6 mt-12 rounded-lg shadow-xl shadow-slate-200/50">
+                        <div className="grid grid-cols-12 gap-4">
+                            <PasswordSection currentUser={currentUser}/>
+                        </div>
+                    </div>
+                )}
                 <DeleteAccountSection currentUser={currentUser}/>
                 <div className="flex justify-end">
                     <button
@@ -110,6 +122,8 @@ AccountForm.propTypes = {
     handleSubmitUser: PropTypes.func.isRequired,
     vacation: PropTypes.bool.isRequired,
     handleVacationChange: PropTypes.func.isRequired,
+    loadingRelatedAccount: PropTypes.bool.isRequired,
+    relatedAccount: PropTypes.func.isRequired,
 };
 
 export default AccountForm;

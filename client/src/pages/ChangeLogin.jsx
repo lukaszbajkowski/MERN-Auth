@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import ChangeLoginForm from "../components/account/ChangeLoginForm.jsx";
 import ChangeLoginModal from "../components/account/ChangeLoginModal.jsx";
-import displayModalWithoutLogout from "../components/account/displayModalWithoutLogout.jsx";
+import displayModalWithoutLogout from "../components/account/DisplayModalWithoutLogout.jsx";
 
 const ChangeLogin = ({
                          currentUser,

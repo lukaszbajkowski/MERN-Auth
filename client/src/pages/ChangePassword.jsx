@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import ChangePasswordModal from "../components/account/ChangePasswordModal.jsx";
 import ChangePasswordForm from "../components/account/ChangePasswordForm.jsx";
-import displayModalWithoutLogout from "../components/account/displayModalWithoutLogout.jsx";
+import displayModalWithoutLogout from "../components/account/DisplayModalWithoutLogout.jsx";
 
 const ChangePassword = ({
                             handleSubmit,
