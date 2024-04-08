@@ -82,21 +82,26 @@ const AccountForm = ({
                         />
                     </div>
                 </div>
-                <div className="col-span-8 bg-slate-200 p-6 mt-12 rounded-lg shadow-xl shadow-slate-200/50">
-                    <div className="grid grid-cols-12 gap-4">
-                        <RelatedAccount
-                            relatedAccount={relatedAccount}
-                            loadingRelatedAccount={loadingRelatedAccount}
-                            currentUser={currentUser}
-                        />
-                    </div>
-                </div>
                 {!currentUser.googleAccount && (
-                    <div className="col-span-8 bg-slate-200 p-6 mt-12 rounded-lg shadow-xl shadow-slate-200/50">
-                        <div className="grid grid-cols-12 gap-4">
-                            <PasswordSection currentUser={currentUser}/>
+                    <>
+                        <div className="col-span-8 bg-slate-200 p-6 mt-12 rounded-lg shadow-xl shadow-slate-200/50">
+                            <div className="grid grid-cols-12 gap-4">
+                                <RelatedAccount
+                                    relatedAccount={relatedAccount}
+                                    loadingRelatedAccount={loadingRelatedAccount}
+                                    currentUser={currentUser}
+                                />
+                            </div>
                         </div>
-                    </div>
+                        <p className="text-xs font-light px-6 pt-3 pb-1 md:pb-0 md:pt-2 leading-6">
+                            Link your accounts to be a verified user. By doing so, you will gain many benefits .
+                        </p>
+                        <div className="col-span-8 bg-slate-200 p-6 mt-12 rounded-lg shadow-xl shadow-slate-200/50">
+                            <div className="grid grid-cols-12 gap-4">
+                                <PasswordSection currentUser={currentUser}/>
+                            </div>
+                        </div>
+                    </>
                 )}
                 <DeleteAccountSection currentUser={currentUser}/>
                 <div className="flex justify-end">
