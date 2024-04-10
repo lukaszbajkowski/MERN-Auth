@@ -19,6 +19,7 @@ import ChangeLogin from "./ChangeLogin.jsx";
 import ChangePassword from "./ChangePassword.jsx";
 import DeleteAccount from "./DeleteAccount.jsx";
 import {getAuth, GoogleAuthProvider, signInWithPopup} from "firebase/auth";
+import SecuritySettings from "./SecuritySettings.jsx";
 
 export default function Profile () {
     const dispatch = useDispatch();
@@ -383,10 +384,9 @@ export default function Profile () {
                         <SettingNavigation/>
                     </div>
                     <div className="row-span-3 md:col-span-8 p-4">
-                        <div className="col-span-8 bg-blue-500">6</div>
+                        <SecuritySettings/>
                     </div>
-                </>
-            ,
+                </>,
         },
         '/change/email': {
             content:

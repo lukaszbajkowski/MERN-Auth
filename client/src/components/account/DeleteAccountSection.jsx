@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 const DeleteAccountSection = (currentUser) => {
     return (
         <div
-            className="col-span-8 bg-slate-200 p-6 mt-12 rounded-lg shadow-xl shadow-slate-200/50 cursor-pointer"
+            className="col-span-8 bg-slate-200 p-6 mt-12 rounded-lg shadow-xl shadow-slate-200/50 cursor-pointer transition duration-300 ease-in-out hover:transition hover:duration-300 hover:ease-in-out hover:bg-slate-300 hover:bg-opacity-80 hover:shadow-slate-300/50"
             onClick={() => {
                 window.location.href = "/delete/account";
             }}
