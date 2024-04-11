@@ -13,7 +13,7 @@ const SettingItem = ({title, description, path, isLast}) => {
         >
             <div className="grid grid-cols-12 gap-4">
                 <div className="col-start-1 col-end-10 grid grid-cols-12 gap-0 text-black text-start my-auto">
-                    <div className="col-start-1 col-end-13 font-bold text-start my-auto">
+                    <div className="col-start-1 col-end-13 font-semibold text-start my-auto">
                         <h1>{title}</h1>
                     </div>
                     <div className="col-start-1 col-end-13 flex flex-col my-auto">

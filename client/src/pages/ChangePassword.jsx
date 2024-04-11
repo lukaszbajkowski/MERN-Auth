@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import ChangePasswordModal from "../components/account/ChangePasswordModal.jsx";
 import ChangePasswordForm from "../components/account/ChangePasswordForm.jsx";
 import displayModalWithoutLogout from "../components/account/DisplayModalWithoutLogout.jsx";
+import ChangePasswordInfo from "../components/account/ChangePasswordInfo";
 
 const ChangePassword = ({
                             handleSubmit,
@@ -20,18 +21,24 @@ const ChangePassword = ({
     } = displayModalWithoutLogout(updateSuccess);
 
     return (
-        <div className="p-3 max-w-2xl mx-auto">
+        <div className="p-3 max-w-5xl mx-auto">
+            <h1 className="ps-6 pb-3 text-2xl font-bold text-start my-auto">
+                Change password
+            </h1>
             <div className="col-span-8 bg-slate-200 p-6 rounded-lg shadow-xl shadow-slate-200/50">
-                <ChangePasswordForm
-                    handleSubmit={(e) => {
-                        handleSubmit(e);
-                        setShowModal(true);
-                    }}
-                    handleChange={handleChange}
-                    loading={loading}
-                    passwordField={passwordField}
-                    currentPasswordField={currentPasswordField}
-                />
+                <div className={`grid md:grid-cols-2 grid-cols-1 gap-6`}>
+                    <ChangePasswordInfo/>
+                    <ChangePasswordForm
+                        handleSubmit={(e) => {
+                            handleSubmit(e);
+                            setShowModal(true);
+                        }}
+                        handleChange={handleChange}
+                        loading={loading}
+                        passwordField={passwordField}
+                        currentPasswordField={currentPasswordField}
+                    />
+                </div>
             </div>
             {error && (
                 <p className="text-sm text-red-700 px-6 pt-3 pb-2 md:pb-0 md:pt-3 leading-6">

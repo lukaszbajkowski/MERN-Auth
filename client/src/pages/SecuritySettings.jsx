@@ -11,7 +11,7 @@ const SecuritySettings = () => {
             <div className="col-span-8 bg-slate-200 p-6 pb-4 rounded-t-lg shadow-xl shadow-slate-200/50">
                 <div className="grid grid-cols-12 gap-1">
                     <div className="col-start-1 col-end-13 text-black text-start my-auto">
-                        <h1 className="text-2xl font-bold">Additional account security</h1>
+                        <h1 className="text-2xl font-semibold">Additional account security</h1>
                     </div>
                     <div className="col-start-1 col-end-13 flex flex-col my-auto">
                         <div className="grid grid-cols-12">

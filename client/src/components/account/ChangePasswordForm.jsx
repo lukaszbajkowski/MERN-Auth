@@ -6,12 +6,12 @@ const ChangePasswordForm = ({handleSubmit, handleChange, passwordField, currentP
             onSubmit={(e) => {
                 handleSubmit(e);
             }}
-            className="grid grid-cols-12 gap-4"
+            className="space-y-4 my-auto"
         >
             <h1 className="col-start-1 col-end-7 text-black text-start my-auto">
                 Current Password
             </h1>
-            <div className="md:col-start-7 col-start-1 col-end-13 flex flex-col my-auto">
+            <div className="col-start-1 col-end-13 flex flex-col my-auto">
                 <input
                     type="password"
                     id="currentPassword"
@@ -25,7 +25,7 @@ const ChangePasswordForm = ({handleSubmit, handleChange, passwordField, currentP
             <h1 className="col-start-1 col-end-7 text-black text-start my-auto">
                 New Password
             </h1>
-            <div className="md:col-start-7 col-start-1 col-end-13 flex flex-col my-auto">
+            <div className="col-start-1 col-end-13 flex flex-col my-auto">
                 <input
                     type="password"
                     id="password"
