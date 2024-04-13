@@ -35,6 +35,7 @@ export default function Profile () {
     const [loadingImage, setLoadingImage] = useState(false);
     const [loadingProfileInfo, setLoadingProfileInfo] = useState(false);
     const [loadingRelatedAccount, setLoadingRelatedAccount] = useState(false);
+    const [loadingChangePassword, setLoadingChangePassword] = useState(false);
     const location = useLocation();
     const [showCity, setShowCity] = useState(currentUser.showCity);
     const [vacation, setVacation] = useState(currentUser.vacation);
@@ -158,9 +159,11 @@ export default function Profile () {
         }
     };
 
-
-    const updatePassword = async () => {
+    const updatePassword = async (e) => {
+        e.preventDefault();
         try {
+            setLoadingChangePassword(false);
+            dispatch(updateUserStart());
             const res = await fetch(`/api/user/update/password/${currentUser._id}`, {
                 method: "POST",
                 headers: {
@@ -173,19 +176,22 @@ export default function Profile () {
 
             if (data.success === false) {
                 dispatch(updateUserFailure(data));
+                setLoadingChangePassword(false);
                 return;
             }
 
             dispatch(updateUserSuccess(data));
-            setUpdateSuccess(true);
             setCurrentPasswordField("");
             setNewPasswordField("");
+            setUpdateSuccess(true);
+            setLoadingChangePassword(false);
 
             setTimeout(() => {
                 setUpdateSuccess(false);
             }, 5000);
         } catch (error) {
             dispatch(updateUserFailure(error));
+            setLoadingChangePassword(false);
         }
     };
 
@@ -423,7 +429,7 @@ export default function Profile () {
                         handleSubmit={updatePassword}
                         handleChange={handleChange}
                         updateSuccess={updateSuccess}
-                        loading={loading}
+                        loading={loadingChangePassword}
                         error={error}
                         currentPasswordField={currentPasswordField}
                         newPasswordField={newPasswordField}

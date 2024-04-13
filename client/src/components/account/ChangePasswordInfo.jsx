@@ -8,7 +8,7 @@ export default function ChangePasswordInfo () {
                 <ul className={`text-neutral-700 list-decimal space-y-2`}>
                     <li>
                         Create passwords that are hard to guess. These can be combinations from numbers, special
-                        symbols, upper and lower case letters. The length of the password must be at least 7 symbols.
+                        symbols, upper and lower case letters. The length of the password must be at least 8 symbols.
                     </li>
                     <li>
                         Use at least one digit in the password.

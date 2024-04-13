@@ -121,7 +121,6 @@ export const updateUsername = async (req, res, next) => {
     }
 };
 
-
 export const updatePassword = async (req, res, next) => {
     try {
         if (req.user.id !== req.params.id) {
@@ -147,7 +146,17 @@ export const updatePassword = async (req, res, next) => {
             return next(errorHandler(400, "New password is required."));
         }
 
-        const hashedPassword = bcryptjs.hashSync(req.body.password, 10);
+        // Sprawdzenie warunków nowego hasła
+        const newPassword = req.body.password;
+        const isPasswordValid = newPassword.length >= 8 &&
+            /[A-Z]/.test(newPassword) &&
+            /[a-z]/.test(newPassword) &&
+            /\d/.test(newPassword);
+        if (!isPasswordValid) {
+            return next(errorHandler(400, "Password must be at least 8 characters long, contain at least 1 uppercase letter, 1 lowercase letter, and 1 number."));
+        }
+
+        const hashedPassword = bcryptjs.hashSync(newPassword, 10);
 
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id,
@@ -161,6 +170,7 @@ export const updatePassword = async (req, res, next) => {
         next(error);
     }
 };
+
 
 export const updateUserProfilePicture = async (req, res, next) => {
     const updateFields = {
@@ -199,10 +209,10 @@ export const deleteUser = async (req, res, next) => {
 
 export const deleteUserMessage = async (req, res) => {
     try {
-        const { recipientEmail, senderEmail, subject, content } = req.body;
+        const {recipientEmail, senderEmail, subject, content} = req.body;
 
         if (!recipientEmail || !senderEmail || !subject || !content) {
-            return res.status(400).json({ success: false, message: 'Missing required data.' });
+            return res.status(400).json({success: false, message: 'Missing required data.'});
         }
 
         const mailOptions = {
@@ -214,9 +224,9 @@ export const deleteUserMessage = async (req, res) => {
 
         await transporter.sendMail(mailOptions);
 
-        res.status(200).json({ success: true, message: 'Email sent successfully.' });
+        res.status(200).json({success: true, message: 'Email sent successfully.'});
     } catch (error) {
         console.error('Error sending email:', error);
-        res.status(500).json({ success: false, message: 'Failed to send email.' });
+        res.status(500).json({success: false, message: 'Failed to send email.'});
     }
 };
