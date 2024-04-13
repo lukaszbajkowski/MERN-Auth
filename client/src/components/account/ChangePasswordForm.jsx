@@ -65,12 +65,12 @@ const ChangePasswordForm = ({
                     handleSubmit(e);
                 }
             }}
-            className="space-y-4 my-auto"
+            className="space-y-2 my-auto"
         >
-            <h1 className="col-start-1 col-end-7 text-neutral-800 text-start my-auto">
+            <h1 className="col-start-1 col-end-7 text-neutral-800 text-start">
                 Current Password
             </h1>
-            <div className="col-start-1 col-end-13 flex flex-col my-auto">
+            <div className="col-start-1 col-end-13 flex flex-col">
                 <input
                     type="password"
                     id="currentPassword"
@@ -81,10 +81,10 @@ const ChangePasswordForm = ({
                     onChange={handleCurrentPasswordChange}
                 />
             </div>
-            <h1 className="col-start-1 col-end-7 text-neutral-800 text-start my-auto">
+            <h1 className="col-start-1 col-end-7 text-neutral-800 text-start">
                 New Password
             </h1>
-            <div className="col-start-1 col-end-13 flex flex-col my-auto">
+            <div className="col-start-1 col-end-13 flex flex-col">
                 <input
                     type="password"
                     id="password"

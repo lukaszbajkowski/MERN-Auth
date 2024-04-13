@@ -79,7 +79,7 @@ export default function SignIn () {
                     </p>
                 )}
             </form>
-            <div className="flex mt-16 ">
+            <div className="flex mt-12">
                 <div className="mx-auto flex gap-2">
                     <p>Don't have an account?</p>
                     <Link to={`/sign-up`}>
