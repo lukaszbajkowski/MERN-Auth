@@ -46,6 +46,11 @@ export const updateEmail = async (req, res, next) => {
             return next(errorHandler(401, "You can update only your account!"));
         }
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(req.body.email)) {
+            return next(errorHandler(400, "Please enter a valid email address."));
+        }
+
         const user = await User.findById(req.params.id);
 
         if (!user) {
@@ -54,6 +59,10 @@ export const updateEmail = async (req, res, next) => {
 
         if (!req.body.email) {
             return next(errorHandler(400, "Email is required."));
+        }
+
+        if (req.body.email === user.email) {
+            return next(errorHandler(400, "You need to change your email to a different email than your actual one."));
         }
 
         req.body.emailConfirmed = false;
@@ -90,7 +99,6 @@ export const updateEmail = async (req, res, next) => {
         next(error);
     }
 };
-
 
 export const updateUsername = async (req, res, next) => {
     try {
@@ -146,7 +154,6 @@ export const updatePassword = async (req, res, next) => {
             return next(errorHandler(400, "New password is required."));
         }
 
-        // Sprawdzenie warunków nowego hasła
         const newPassword = req.body.password;
         const isPasswordValid = newPassword.length >= 8 &&
             /[A-Z]/.test(newPassword) &&

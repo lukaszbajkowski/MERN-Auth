@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import OAuth from "../components/OAuth";
 import {CheckIcon, XMarkIcon} from "@heroicons/react/24/outline";
@@ -31,32 +31,23 @@ const SignUp = () => {
     const validatePassword = (password) => {
         const errors = [...passwordErrors];
 
-        if (password.length >= 8) {
-            errors[0].valid = true;
-        } else {
-            errors[0].valid = false;
-        }
-        if (/[A-Z]/.test(password)) {
-            errors[1].valid = true;
-        } else {
-            errors[1].valid = false;
-        }
-        if (/[a-z]/.test(password)) {
-            errors[2].valid = true;
-        } else {
-            errors[2].valid = false;
-        }
-        if (/\d/.test(password)) {
-            errors[3].valid = true;
-        } else {
-            errors[3].valid = false;
-        }
+        errors[0].valid = password.length >= 8;
+        errors[1].valid = /[A-Z]/.test(password);
+        errors[2].valid = /[a-z]/.test(password);
+        errors[3].valid = /\d/.test(password);
 
         setPasswordErrors(errors);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(formData.email)) {
+            setError("Please enter a valid email address.");
+            return;
+        }
+
         if (!isPasswordValid) {
             setError("Password must meet all criteria.");
             return;
@@ -98,7 +89,7 @@ const SignUp = () => {
                             text-neutral-800 text-sm block w-full"
                 />
                 <input
-                    type="email"
+                    type="text"
                     placeholder="Email"
                     id="email"
                     onChange={handleChange}
