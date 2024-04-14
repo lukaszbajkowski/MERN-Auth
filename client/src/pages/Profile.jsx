@@ -35,11 +35,11 @@ export default function Profile () {
     const [loadingImage, setLoadingImage] = useState(false);
     const [loadingProfileInfo, setLoadingProfileInfo] = useState(false);
     const [loadingRelatedAccount, setLoadingRelatedAccount] = useState(false);
+    const [loadingChangeEmail, setLoadingChangeEmail] = useState(false);
     const [loadingChangePassword, setLoadingChangePassword] = useState(false);
     const location = useLocation();
     const [showCity, setShowCity] = useState(currentUser.showCity);
     const [vacation, setVacation] = useState(currentUser.vacation);
-
 
     useEffect(() => {
         if (image) {
@@ -103,8 +103,11 @@ export default function Profile () {
         setVacation(checked);
     };
 
-    const updateEmail = async () => {
+    const updateEmail = async (e) => {
+        e.preventDefault();
         try {
+            setLoadingChangeEmail(true);
+            dispatch(updateUserStart());
             const res = await fetch(`/api/user/update/email/${currentUser._id}`, {
                 method: "POST",
                 headers: {
@@ -117,17 +120,20 @@ export default function Profile () {
 
             if (data.success === false) {
                 dispatch(updateUserFailure(data));
+                setLoadingChangeEmail(false);
                 return;
             }
 
             dispatch(updateUserSuccess(data));
             setUpdateSuccess(true);
+            setLoadingChangeEmail(false);
 
             setTimeout(() => {
                 setUpdateSuccess(false);
             }, 5000);
         } catch (error) {
             dispatch(updateUserFailure(error));
+            setLoadingChangeEmail(false);
         }
     };
 
@@ -162,7 +168,7 @@ export default function Profile () {
     const updatePassword = async (e) => {
         e.preventDefault();
         try {
-            setLoadingChangePassword(false);
+            setLoadingChangePassword(true);
             dispatch(updateUserStart());
             const res = await fetch(`/api/user/update/password/${currentUser._id}`, {
                 method: "POST",
@@ -402,7 +408,7 @@ export default function Profile () {
                         handleSubmit={updateEmail}
                         handleChange={handleChange}
                         updateSuccess={updateSuccess}
-                        loading={loading}
+                        loading={loadingChangeEmail}
                         error={error}
                     />
                 </div>
